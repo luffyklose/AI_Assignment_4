@@ -27,7 +27,7 @@ public:
 	virtual void clean() override;
 	virtual void handleEvents() override;
 	virtual void start() override;
-	static std::vector<PathNode*> getNodeVec() { return m_pathNodeVec; }
+	//static std::vector<PathNode*> getNodeVec() { return m_pathNodeVec; }
 private:
 	void buildGrid();
 	void displayGrid();
@@ -61,7 +61,7 @@ private:
 	int m_pathNodeNum;
 
 	//Obstacle* m_pObstacle;
-	static std::vector<PathNode*> m_pathNodeVec;
+	//static std::vector<PathNode*> m_pathNodeVec;
 
 	//DestructibleObstacle* m_pObstacle;
 

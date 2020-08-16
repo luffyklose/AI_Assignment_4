@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BehaviorState.h"
 #include "Enemy.h"
 #include "HealthBarBorder.h"
 #include "HealthBarFiller.h"
@@ -7,7 +8,7 @@
 class Archer final : public Enemy
 {
 public:
-	Archer();
+	Archer(Player* player);
 	~Archer();
 
 	// Life Cycle Functions
@@ -22,9 +23,24 @@ public:
 
 private:
 	void m_buildAnimations();
-	void MovePlane();
-	void SetNextNode();
+	//void MovePlane();
+	//void SetNextNode();
+	void m_checkCurrentConditions();
+	void m_stateMachineUpdate();
+	void Move2NearestAttackNode();
+	void Shoot();
+	void setFaceDir();
 
+public:
+	
+private:
+	bool M_withinShootRange,
+		m_attackMode;
+	int m_shootCounter;
+
+	BehaviorState m_outerState,
+		m_innerState;
+	
 	HealthBarBorder* m_pBorder;
 	HealthBarFiller* m_pFiller;
 };

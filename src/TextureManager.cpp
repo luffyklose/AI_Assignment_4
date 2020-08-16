@@ -140,8 +140,8 @@ void TextureManager::draw(const std::string& id, const int x, const int y, int w
 	destRect.h = h;
 
 	if (centered) {
-		const int xOffset = textureWidth * 0.5;
-		const int yOffset = textureHeight * 0.5;
+		const int xOffset = destRect.w * 0.5;
+		const int yOffset = destRect.h * 0.5;
 		destRect.x = x - xOffset;
 		destRect.y = y - yOffset;
 	}
@@ -263,8 +263,8 @@ void TextureManager::playAnimation(
 	destRect.h = h;
 
 	if (centered) {
-		const int xOffset = textureWidth * 0.5;
-		const int yOffset = textureHeight * 0.5;
+		const int xOffset = destRect.w * 0.5;
+		const int yOffset = destRect.h * 0.5;
 		destRect.x = x - xOffset;
 		destRect.y = y - yOffset;
 	}

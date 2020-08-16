@@ -11,20 +11,20 @@ public:
 		return s_pInstance;
 	}
 
-	FireBall* generateFireball();
-
+	 void generateFireball();
 	void update();
 	void draw();
-
+	void Init();
+	 std::list<FireBall*> getFireBallList() { return m_pFireBallPool; }
+	
 private:
 	ProjectileManager();
 	~ProjectileManager();
 
-	void m_buildFireballPool();
+	 void m_buildFireballPool();
 	
-	int m_FireballNumber;
+	//int m_FireballNumber;
 	std::list<FireBall*> m_pFireBallPool;
 
-	static ProjectileManager* s_pInstance;
-	
+	static ProjectileManager* s_pInstance;	
 };

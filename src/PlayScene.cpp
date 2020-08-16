@@ -4,11 +4,14 @@
 #include "Util.h"
 #include"PathManager.h"
 #include <fstream>
+
+#include "DestructibleObstacleManager.h"
 #include "ProjectileManager.h"
 #include"SoundManager.h"
 #include "EnemyManager.h"
+#include "NodeManager.h"
 
-std::vector<PathNode*> PlayScene::m_pathNodeVec;
+//std::vector<PathNode*> PlayScene::m_pathNodeVec;
 
 PlayScene::PlayScene()
 {
@@ -24,15 +27,15 @@ void PlayScene::draw()
 
 	if(m_isDebugMode)
 	{
-		Util::DrawRect(m_pPlayer->getTransform()->position , m_pPlayer->getWidth(), m_pPlayer->getHeight());
+		Util::DrawRect(m_pPlayer->getTransform()->position - glm::vec2(0.5f * m_pPlayer->getWidth(), 0.5f * m_pPlayer->getHeight()), m_pPlayer->getWidth(), m_pPlayer->getHeight());
 
-		for(auto m_pEnemy:m_enemyVec)
+		for (auto m_pEnemy :EnemyManager::Instance()->getEnemyVec())
 		{
 			auto LOSColour = (m_pEnemy->getHasLOS()) ? glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) : glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 			auto CircleColour = (m_pEnemy->getDetect()) ? glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) : glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 			Util::DrawLine(m_pPlayer->getTransform()->position, m_pEnemy->getTransform()->position, LOSColour);
-			Util::DrawRect(m_pEnemy->getTransform()->position - glm::vec2(0.5f*m_pEnemy->getWidth(),0.5f*m_pEnemy->getHeight()) , m_pEnemy->getWidth(), m_pEnemy->getHeight());
-			Util::DrawCircle(m_pEnemy->getTransform()->position , m_pEnemy->getDetectionRadius(),CircleColour);
+			Util::DrawRect(m_pEnemy->getTransform()->position - glm::vec2(0.5f * m_pEnemy->getWidth(), 0.5f * m_pEnemy->getHeight()), m_pEnemy->getWidth(), m_pEnemy->getHeight());
+			Util::DrawCircle(m_pEnemy->getTransform()->position, m_pEnemy->getDetectionRadius(), CircleColour);
 		}
 
 		/*for(auto m_pObstacle:m_obstacleVec)
@@ -72,7 +75,7 @@ void PlayScene::update()
 		}
 	}*/
 	
-	for(auto m_pEnemy : m_enemyVec)
+	for(auto m_pEnemy : EnemyManager::Instance()->getEnemyVec())
 	{
 		m_pEnemy->detectPlayer(m_pPlayer);
 		for (int i=0;i<(int)m_obstacleVec.size();i++)
@@ -153,7 +156,7 @@ void PlayScene::handleEvents()
 	// handle player movement if no Game Controllers found
 	if (SDL_NumJoysticks() < 1)
 	{
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A) && !CollisionManager::PlayerCollision(m_pPlayer,glm::vec2(-5.0f,0.0f),m_obstacleVec) && m_pPlayer->getTransform()->position.x > 0.0f)
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(-5.0f, 0.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.x > 0.5f * m_pPlayer->getWidth())
 		{
 			m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
 			m_pPlayer->setDirection(Sprite::left);
@@ -163,7 +166,7 @@ void PlayScene::handleEvents()
 			m_pPlayer->getRigidBody()->velocity *= m_pPlayer->getRigidBody()->velocity * 0.9f;
 			SoundManager::Instance().playSound("step", 0, -1);
 		}
-		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(5.0f, 0.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.x < Config::SCREEN_WIDTH - m_pPlayer->getWidth())
+		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(5.0f, 0.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.x < Config::SCREEN_WIDTH - 0.5f * m_pPlayer->getWidth())
 		{
 			m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
 			m_pPlayer->setDirection(Sprite::right);
@@ -173,7 +176,7 @@ void PlayScene::handleEvents()
 			m_pPlayer->getRigidBody()->velocity *= m_pPlayer->getRigidBody()->velocity * 0.9f;
 			SoundManager::Instance().playSound("step", 0, -1);
 		}
-		else if(EventManager::Instance().isKeyDown(SDL_SCANCODE_W) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, -5.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.y > 0.0f)
+		else if(EventManager::Instance().isKeyDown(SDL_SCANCODE_W) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, -5.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.y > 0.5f * m_pPlayer->getHeight())
 		{
 			m_pPlayer->setDirection(Sprite::up);
 			
@@ -182,7 +185,7 @@ void PlayScene::handleEvents()
 			m_pPlayer->getRigidBody()->velocity *= m_pPlayer->getRigidBody()->velocity * 0.9f;
 			SoundManager::Instance().playSound("step", 0, -1);
 		}
-		else if(EventManager::Instance().isKeyDown(SDL_SCANCODE_S) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, 5.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.y < Config::SCREEN_HEIGHT - m_pPlayer->getHeight())
+		else if(EventManager::Instance().isKeyDown(SDL_SCANCODE_S) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, 5.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.y < Config::SCREEN_HEIGHT - 0.5f * m_pPlayer->getHeight())
 		{
 			m_pPlayer->setDirection(Sprite::down);
 			
@@ -217,8 +220,8 @@ void PlayScene::handleEvents()
 		{
 			m_pRightButtonPressed = true;
 
-			auto fireball = ProjectileManager::Instance()->generateFireball();
-			addChild(fireball);
+			ProjectileManager::Instance()->generateFireball();
+			FireBall* fireball = ProjectileManager::Instance()->getFireBallList().back();
 			
 			switch (m_pPlayer->getDirection())
 			{
@@ -336,7 +339,7 @@ void PlayScene::handleEvents()
 			m_pKPressed = true;
 			for (auto m_pEnemy : m_enemyVec)
 			{
-				m_pEnemy->DecHP(m_pPlayer->getDamage());
+				m_pEnemy->DecHP(m_pPlayer->getMeleeDamage());
 			}
 			SoundManager::Instance().playSound("WEEOOW", 0, -1);
 		}
@@ -365,26 +368,26 @@ void PlayScene::handleEvents()
 
 void PlayScene::buildGrid()
 {
-	for(int row=0;row<Config::ROW_NUM;++row)
+	for (int row = 0; row < Config::ROW_NUM; ++row)
 	{
-		for(int col=0;col<Config::COL_NUM;++col)
+		for (int col = 0; col < Config::COL_NUM; ++col)
 		{
 			PathNode* tempNode = new PathNode();
-			tempNode->getTransform()->position = glm::vec2(tempNode->getWidth() * col+0.5f*Config::TILE_SIZE, tempNode->getHeight() * row+0.5f * Config::TILE_SIZE);
-			m_pathNodeVec.push_back(tempNode);
+			tempNode->getTransform()->position = glm::vec2(tempNode->getWidth() * col + 0.5f * Config::TILE_SIZE, tempNode->getHeight() * row + 0.5f * Config::TILE_SIZE);
+			NDMA::AddPathNode(tempNode);
 		}
 	}
 }
 
 void PlayScene::displayGrid()
 {
-	for(int i=0;i<(int)m_pathNodeVec.size();i++)
+	for (int i = 0; i < (int)NDMA::getPathNodeVec().size(); i++)
 	{
-		auto GridColor = (m_pathNodeVec[i]->getLOS()) ? glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) : glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+		auto GridColor = (NDMA::getPathNodeVec()[i]->getLOS()) ? glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) : glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 		//std::cout << "Path: " << m_pathNodeVec.size() << " Num: " << row * Config::COL_NUM + col << std::endl;
 		//std::cout << "Grid: " << m_pathNodeVec[i]->getTransform()->position.x - m_pathNodeVec[i]->getWidth() * 0.5f << " " << m_pathNodeVec[i]->getTransform()->position.y - m_pathNodeVec[i]->getHeight() * 0.5f << std::endl;
-		Util::DrawRect(m_pathNodeVec[i]->getTransform()->position - glm::vec2(m_pathNodeVec[i]->getWidth() * 0.5f, m_pathNodeVec[i]->getHeight() * 0.5f), 40, 40);
-		Util::DrawRect(m_pathNodeVec[i]->getTransform()->position , 5, 5, GridColor);
+		Util::DrawRect(NDMA::getPathNodeVec()[i]->getTransform()->position - glm::vec2(NDMA::getPathNodeVec()[i]->getWidth() * 0.5f, NDMA::getPathNodeVec()[i]->getHeight() * 0.5f), 40, 40);
+		Util::DrawRect(NDMA::getPathNodeVec()[i]->getTransform()->position, 5, 5, GridColor);
 	}
 }
 
@@ -403,13 +406,13 @@ void PlayScene::LoadMap()
 				{
 				case 'g':
 					{
-					m_level[row][col] = new Grass(40.0f * col , 40.0f * row ); 
+					m_level[row][col] = new Grass(40.0f * col + 0.5 * Config::TILE_SIZE, 40.0f * row + 0.5 * Config::TILE_SIZE);
 					//std::cout << "Grass: " << m_level[row][col]->getTransform()->position.x << " " << m_level[row][col]->getTransform()->position.y << std::endl;
 					break;
 					}
 				case 'b':
 					{
-					m_level[row][col] = new Brick(40.0f * col , 40.0f * row ); 
+					m_level[row][col] = new Brick(40.0f * col + 0.5 * Config::TILE_SIZE, 40.0f * row + 0.5 * Config::TILE_SIZE);
 					m_obstacleVec.push_back(m_level[row][col]);
 					//std::cout << "DestructibleObstacle Size: " << m_obstacleVec.size() << std::endl;
 					//std::cout << "Brick: " << m_level[row][col]->getTransform()->position.x << " " << m_level[row][col]->getTransform()->position.y << std::endl;
@@ -423,9 +426,9 @@ void PlayScene::LoadMap()
 				if (!m_level[row][col]->IsObstacle() && !m_level[row][col]->IsHazard())
 				{
 					m_level[row][col]->m_node = new PathNode();
-					m_level[row][col]->m_node->getTransform()->position.x = m_level[row][col]->getTransform()->position.x + 0.5f * Config::TILE_SIZE;
-					m_level[row][col]->m_node->getTransform()->position.y = m_level[row][col]->getTransform()->position.y + 0.5f * Config::TILE_SIZE;
-					m_pathNodeVec.push_back(m_level[row][col]->m_node);
+					m_level[row][col]->m_node->getTransform()->position.x = m_level[row][col]->getTransform()->position.x;
+					m_level[row][col]->m_node->getTransform()->position.y = m_level[row][col]->getTransform()->position.y;
+					NDMA::AddPathNode(m_level[row][col]->m_node);
 					m_pathNodeNum++;
 					//std::cout << "PathNode[" << row << "][" << col << "] created." << std::endl;
 				}
@@ -462,7 +465,7 @@ void PlayScene::AddConnection()
 
 void PlayScene::setGridLOS()
 {
-	for(auto m_pNode:m_pathNodeVec)
+	for(auto m_pNode: NDMA::getPathNodeVec())
 	{
 		for(auto obstacle:m_obstacleVec)
 		{
@@ -510,12 +513,12 @@ void PlayScene::DrawPath()
 PathNode* PlayScene::getPathNode(int x, int y)
 {
 	int Index = (x - 1) * Config::ROW_NUM + (y - 1) * Config::COL_NUM;
-	return m_pathNodeVec[Index];
+	return NDMA::getPathNodeVec()[Index];
 }
 
 void PlayScene::drawLOS()
 {	
-	for (auto node : m_pathNodeVec)
+	for (auto node : NDMA::getPathNodeVec())
 	{
 		if(!node->getLOS())
 		{
@@ -557,94 +560,42 @@ void PlayScene::start()
 	//buildGrid();
 	LoadMap();
 	AddConnection();
-	// Plane Sprite
-	//m_enemyVec.push_back(new Plane(400.0f, 100.0f));
-	//for (auto m_pEnemy : m_enemyVec)
-	//{
-	//	addChild(m_pEnemy);
-	//	//std::cout << "Position: " << m_pEnemy->getTransform()->position.x << " " << m_pEnemy->getTransform()->position.y << std::endl;
-	//}
-	//std::cout << "Enemy: " << (int)m_enemyVec.size() << " "<< numberOfChildren()<<std::endl;
-	/*m_enemyVec[0]->setStartNode(getPathNode(10, 3));
-	m_enemyVec[0]->setEndNode(getPathNode(10, 7));*/
 
-	/*m_enemyVec[0]->addPathNode(m_pathNodeVec[0]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[1]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[2]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[3]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[4]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[5]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[6]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[7]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[8]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[9]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[10]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[11]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[12]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[13]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[14]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[15]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[16]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[17]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[18]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[19]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[39]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[59]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[79]);	
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[78]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[77]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[76]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[75]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[74]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[73]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[72]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[71]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[70]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[69]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[68]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[67]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[66]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[65]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[64]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[63]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[62]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[61]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[60]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[40]);
-	m_enemyVec[0]->addPathNode(m_pathNodeVec[20]);*/
+	// Set Enemy
+	m_pPlayer = new Player(100.0f, 500.0f);
+	addChild(m_pPlayer);	
 
-	/*m_enemyVec[0]->AddKeyNode(m_pathNodeVec[0]);
-	m_enemyVec[0]->AddKeyNode(m_pathNodeVec[19]);
-	m_enemyVec[0]->AddKeyNode(m_pathNodeVec[79]);
-	m_enemyVec[0]->AddKeyNode(m_pathNodeVec[60]);*/
-	//m_enemyVec[0]->setPath();
-
-	for(auto enemy:m_enemyVec)
+	//Set Enemies
+	EnemyManager::Instance()->setTarget(m_pPlayer);
+	EnemyManager::Instance()->Init();	
+	for(auto warrior:EnemyManager::Instance()->getWarriorList())
 	{
-		//enemy->getTransform()->position =  enemy->getPatrolPath()[0]->getTransform()->position;
-		enemy->getTransform()->position = enemy->getKeyNode()[0]->m_keyNode->getTransform()->position;
-		enemy->getRigidBody()->maxSpeed = 5.0f;
-		enemy->setCurTargetKdyNode(enemy->getKeyNode()[1]);
-		//std::cout << "To: " << enemy->getCurTargetKeyNode()->m_keyNode->getTransform()->position.x << " " << enemy->getCurTargetKeyNode()->m_keyNode->getTransform()->position.y << std::endl;
-		/*for(int i=0;i<(int)enemy->getKeyNode().size();i++)
-		{
-			std::cout << "Node " << i + 1 << ": " << enemy->getKeyNode()[i]->m_keyNode->getTransform()->position.x << " " << enemy->getKeyNode()[i]->m_keyNode->getTransform()->position.y << std::endl;
-		}*/
+		addChild(warrior);
+	}
+	for(auto archer:EnemyManager::Instance()->getArcherList())
+	{
+		addChild(archer);
 	}
 	
-	auto warrior = EnemyManager::Instance()->generateWarrior();
-	warrior->getTransform()->position.x = 200;
-	warrior->getTransform()->position.y = 200;
-	addChild(warrior);
+	//EnemyManager::Instance()->generateWarrior();
+	//std::cout << "Enemy Number: " << EnemyManager::getEnemyVec().size() << std::endl;
 	
-	auto archer = EnemyManager::Instance()->generateArcher();
-	archer->getTransform()->position.x = 300;
-	archer->getTransform()->position.y = 300;
-	addChild(archer);
+	EnemyManager::Instance()->generateArcher();
+
+	//Set Fireball
+	ProjectileManager::Instance()->Init();
+	for(auto fireball:ProjectileManager::Instance()->getFireBallList())
+	{
+		addChild(fireball);
+	}
+
+	//Set destructible Obstacle
+	DestructibleObstacleManager::Instance()->Init();
+	for(auto obstacle:DestructibleObstacleManager::Instance()->getDesObsList())
+	{
+		addChild(obstacle);
+	}
 	
-	// Player Sprite
-	m_pPlayer = new Player(100.0f,500.0f);
-	addChild(m_pPlayer);
 	//m_playerFacingRight = true;
 
 	//Load Sound

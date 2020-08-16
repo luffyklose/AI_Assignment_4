@@ -147,8 +147,11 @@
     <ClCompile Include="..\src\DestructibleObstacleManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\NodeManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\ProjectileManager.cpp">
-      <Filter>Game Objects</Filter>
+      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -311,8 +314,14 @@
     <ClInclude Include="..\src\DestructibleObstacleManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
+    <ClInclude Include="ObstacleManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\NodeManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\ProjectileManager.h">
-      <Filter>Game Objects</Filter>
+      <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,17 +3,22 @@
 #include "PathManager.h"
 #include "Util.h"
 #include"CollisionManager.h"
+#include "NodeManager.h"
 #include"PlayScene.h"
 
-Enemy::Enemy()
+Enemy::Enemy(Player* player)
 {
-	start_point = nullptr;
-	end_point = nullptr;
+	//start_point = nullptr;
+	//end_point = nullptr;
 	//start_point->getTransform()->position = glm::vec2(0.0f,0.0f);
 	//end_point->getTransform()->position = glm::vec2(0.0f, 0.0f);
 
 	m_isPatrol = false;
 	m_curHealth = ENEMYMAXHEALTH;
+	m_pTargetPlayer = player;
+	m_pFleeNode = nullptr;
+
+	
 }
 
 Enemy::~Enemy()
@@ -57,7 +62,7 @@ void Enemy::MovePlanetoPatrolNode()
 {
 	m_targetNode = m_pPatrolPath[m_nodeIndex];
 	auto targetVector = Util::normalize(m_targetNode->getTransform()->position - this->getTransform()->position);
-	std::cout << "x: " << targetVector.x << " y:" << targetVector.y << std::endl;
+	//std::cout << "x: " << targetVector.x << " y:" << targetVector.y << std::endl;
 
 	float buffer = 0.01;
 	if (targetVector.x >= 1-buffer && targetVector.x<=1+buffer)
@@ -96,8 +101,9 @@ void Enemy::addPathNode(PathNode* node)
 
 void Enemy::detectPlayer(Sprite* player)
 {
-	m_DetectPlayer = CollisionManager::circleRectCheck(this->getTransform()->position, (float)m_detectionRadius, player->getTransform()->position, player->getWidth(), player->getHeight());
-	//std::cout << m_DetectPlayer << std::endl;
+	m_DetectPlayer = CollisionManager::circleRectCheck(this->getTransform()->position, (float)m_detectionRadius, 
+		player->getTransform()->position - glm::vec2(0.5f * player->getWidth(), 0.5f * player->getHeight()), player->getWidth(), player->getHeight());
+	std::cout <<"Detect: "<< m_DetectPlayer << std::endl;
 }
 
 std::vector<PathConnection*> Enemy::getPath()
@@ -130,7 +136,7 @@ void Enemy::PatrolMove()
 {
 	if((int)m_pKeyNodeVec.size()<2)
 		{
-			std::cout << "Key Node is smaller than 2" << std::endl;
+			//std::cout << "Key Node is smaller than 2" << std::endl;
 			return;
 		}
 	if(m_path.empty())
@@ -180,51 +186,45 @@ void Enemy::SetNextNode()
 	}
 }
 
-
-void Enemy::Move2LOS()
+void Enemy::Flee()
 {
-	if (!m_hasLOS)
+	if (NDMA::getFleeNodeVec().empty())
 		return;
-	float NodeDis=0.0f;
-	float EnemyDis = 0.0f;
-	PathNode* TargetPathNode=nullptr;
-	for(auto pathnode:PlayScene::getNodeVec())
+	if (m_currentNode == nullptr)
 	{
-		float tempDistance = Util::distance(this->getTransform()->position, pathnode->getTransform()->position);
-		if (NodeDis == 0.0f && pathnode->getLOS() == false)
+		setCurNode();
+	}
+	int LeastCost = 0;
+	if (m_pFleeNode == nullptr)
+	{
+		for (auto pathnode : NDMA::getFleeNodeVec())
 		{
-			NodeDis = Util::distance(this->getTransform()->position, pathnode->getTransform()->position);
-			TargetPathNode = pathnode;
-			std::cout << "set distance as first value" << std::endl;
-		}		
-		//std::cout << pathnode->getLOS() << " " << NodeDis << " " << tempDistance << std::endl;
-		if(pathnode->getLOS()==false && tempDistance<NodeDis)
-		{
-			NodeDis = tempDistance;
-			TargetPathNode = pathnode;
-			//std::cout << TargetPathNode << std::endl;
-			//std::cout << "this node: " << pathnode->getTransform()->position.x << " " << pathnode->getTransform()->position.y << std::endl;
-			//std::cout << "set target at " << TargetPathNode->getTransform()->position.x << " " << TargetPathNode->getTransform()->position.y << std::endl;
-		}
-		if(EnemyDis==0.0f)
-		{
-			EnemyDis = tempDistance;
-			m_currentNode = pathnode;
-		}
-		else if(tempDistance<EnemyDis)
-		{
-			EnemyDis = tempDistance;
-			m_currentNode = pathnode;
+			if (m_currentNode == pathnode)
+				return;
+			PathManager::GetShortestPath(m_currentNode, pathnode);
+			int tempCost = PathManager::getCost();
+			if (LeastCost == 0 || tempCost < LeastCost)
+			{
+				m_pFleeNode = pathnode;
+				LeastCost = tempCost;
+				m_path = PathManager::getPath();
+				m_currentNode = m_path.front()->GetFromNode();
+				m_targetNode = m_path.front()->GetToNode();
+				m_nodeIndex = 0;
+			}
 		}
 	}
-	//std::cout << "distance:" << NodeDis << std::endl;
-	if (Util::distance(this->getTransform()->position, TargetPathNode->getTransform()->position) < 10.0f)
+
+	if (Util::distance(this->getTransform()->position, m_pFleeNode->getTransform()->position) < 6.0f)
 	{
 		return;
 	}
-	if(m_pTargetPathNode!=TargetPathNode)
+
+	if (m_pTargetPathNode != m_pFleeNode)
 	{
-		m_pTargetPathNode = TargetPathNode;
+		m_pTargetPathNode = m_pFleeNode;
+		if (m_currentNode == m_pTargetPathNode)
+			return;
 		PathManager::GetShortestPath(m_currentNode, m_pTargetPathNode);
 		m_path = PathManager::getPath();
 		m_currentNode = m_path.front()->GetFromNode();
@@ -232,7 +232,56 @@ void Enemy::Move2LOS()
 		m_nodeIndex = 0;
 	}
 	MoveEnemy();
-	if (abs(Util::distance(this->getTransform()->position, m_targetNode->getTransform()->position)) < 10.0f)
+	if (abs(Util::distance(this->getTransform()->position, m_targetNode->getTransform()->position)) < 6.0f)
+	{
+		SetNextNode();
+	}
+}
+
+void Enemy::Move2LOS()
+{
+	setCurNode();
+	if (!m_hasLOS)
+		return;
+	float NodeDis = 0.0f;
+	PathNode* TargetPathNode = nullptr;
+	for (auto pathnode : NDMA::getPathNodeVec())
+	{
+		float tempDistance = Util::distance(this->getTransform()->position, pathnode->getTransform()->position);
+		if (NodeDis == 0.0f && pathnode->getLOS() == false)
+		{
+			NodeDis = tempDistance;
+			TargetPathNode = pathnode;
+			//std::cout << "set distance as first value" << std::endl;
+		}
+		//std::cout << pathnode->getLOS() << " " << NodeDis << " " << tempDistance << std::endl;
+		if (pathnode->getLOS() == false && tempDistance < NodeDis)
+		{
+			NodeDis = tempDistance;
+			TargetPathNode = pathnode;
+			//std::cout << TargetPathNode << std::endl;
+			//std::cout << "this node: " << pathnode->getTransform()->position.x << " " << pathnode->getTransform()->position.y << std::endl;
+			//std::cout << "set target at " << TargetPathNode->getTransform()->position.x << " " << TargetPathNode->getTransform()->position.y << std::endl;
+		}
+	}
+	//std::cout << "distance:" << NodeDis << std::endl;
+	if (Util::distance(this->getTransform()->position, TargetPathNode->getTransform()->position) < 6.0f)
+	{
+		return;
+	}
+	if (m_pTargetPathNode != TargetPathNode)
+	{
+		m_pTargetPathNode = TargetPathNode;
+		if (m_currentNode == m_pTargetPathNode)
+			return;
+		PathManager::GetShortestPath(m_currentNode, m_pTargetPathNode);
+		m_path = PathManager::getPath();
+		m_currentNode = m_path.front()->GetFromNode();
+		m_targetNode = m_path.front()->GetToNode();
+		m_nodeIndex = 0;
+	}
+	MoveEnemy();
+	if (abs(Util::distance(this->getTransform()->position, m_targetNode->getTransform()->position)) < 6.0f)
 	{
 		SetNextNode();
 	}
@@ -263,6 +312,25 @@ void Enemy::MoveEnemy()
 
 	this->getRigidBody()->velocity = targetVector;
 	this->getTransform()->position += this->getRigidBody()->velocity * this->getRigidBody()->maxSpeed;
+}
+
+void Enemy::setCurNode()
+{
+	float tempDis = 0.0f;
+	for (auto pathnode : NDMA::getPathNodeVec())
+	{
+		float tempDistance = Util::distance(this->getTransform()->position, pathnode->getTransform()->position);
+		if (tempDis == 0.0f)
+		{
+			tempDis = tempDistance;
+			m_currentNode = pathnode;
+		}
+		else if (tempDistance < tempDis)
+		{
+			tempDis = tempDistance;
+			m_currentNode = pathnode;
+		}
+	}
 }
 
 void Enemy::setCurTargetKdyNode(KeyNode* target)

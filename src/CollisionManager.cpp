@@ -224,8 +224,8 @@ bool CollisionManager::lineAABBCheck(Ship* object1, GameObject* object2)
 
 bool CollisionManager::LOSCheck(GameObject* from, GameObject* to, GameObject* obstacle)
 {
-	const auto lineStart = from->getTransform()->position;
-	const auto lineEnd = to->getTransform()->position;
+	const auto lineStart = from->getTransform()->position + glm::vec2(0.5f * from->getWidth(), 0.5f * from->getHeight());
+	const auto lineEnd = to->getTransform()->position + glm::vec2(0.5f * to->getWidth(), 0.5f * to->getHeight());
 	// aabb
 	const auto boxWidth = obstacle->getWidth();
 	const int halfBoxWidth = boxWidth * 0.5f;
@@ -249,8 +249,8 @@ bool CollisionManager::LOSCheck(GameObject* from, GameObject* to, Tile* obstacle
 	{
 		return false;
 	}
-	const auto lineStart = from->getTransform()->position;
-	const auto lineEnd = to->getTransform()->position;
+	const auto lineStart = from->getTransform()->position + glm::vec2(0.5f * from->getWidth(), 0.5f * from->getHeight());
+	const auto lineEnd = to->getTransform()->position + glm::vec2(0.5f * to->getWidth(), 0.5f * to->getHeight());
 	// aabb
 	const auto boxWidth = obstacle->getWidth();
 	const int halfBoxWidth = boxWidth * 0.5f;

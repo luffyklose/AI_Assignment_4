@@ -1,7 +1,8 @@
 #include "Player.h"
 #include "TextureManager.h"
+#include "Util.h"
 
-Player::Player(float x,float y): m_currentAnimationState(PLAYER_IDLE_RIGHT),m_playerDamage(PLAYERDAMAGE)
+Player::Player(float x,float y): m_currentAnimationState(PLAYER_IDLE_RIGHT)
 {
 	TextureManager::Instance()->loadSpriteSheet(
 		"../Assets/sprites/kaben.txt",
@@ -44,26 +45,26 @@ void Player::draw()
 	{
 	case PLAYER_IDLE_RIGHT:
 		TextureManager::Instance()->playAnimation("kaben", getAnimation("idle"),
-			x, y, getWidth(), getHeight(), 0.12f, 0, 255, false);
+			x, y, getWidth(), getHeight(), 0.12f, 0, 255, true);
 		break;
 	case PLAYER_IDLE_LEFT:
 		TextureManager::Instance()->playAnimation("kaben", getAnimation("idle"),
-			x, y, getWidth(), getHeight(), 0.12f, 0, 255, false, SDL_FLIP_HORIZONTAL);
+			x, y, getWidth(), getHeight(), 0.12f, 0, 255, true, SDL_FLIP_HORIZONTAL);
 		break;
 	case PLAYER_RUN_RIGHT:
 		TextureManager::Instance()->playAnimation("kaben", getAnimation("run"),
-			x, y, getWidth(), getHeight(), 0.25f, 0, 255, false);
+			x, y, getWidth(), getHeight(), 0.25f, 0, 255, true);
 		break;
 	case PLAYER_RUN_LEFT:
 		TextureManager::Instance()->playAnimation("kaben", getAnimation("run"),
-			x, y, getWidth(), getHeight(), 0.25f, 0, 255, false, SDL_FLIP_HORIZONTAL);
+			x, y, getWidth(), getHeight(), 0.25f, 0, 255, true, SDL_FLIP_HORIZONTAL);
 		break;
 	case PLAYER_HIT_RIGHT:
 		TextureManager::Instance()->playAnimation("kaben", getAnimation("hit"),
-			x, y, getWidth() * (74.0 / 64.0), getHeight(), 0.25f, 0, 255, false);
+			x, y, getWidth() * (74.0 / 64.0), getHeight(), 0.25f, 0, 255, true);
 	case PLAYER_HIT_LEFT:
 		TextureManager::Instance()->playAnimation("kaben", getAnimation("hit"),
-			x, y, getWidth()*(74.0/64.0), getHeight(), 0.25f, 0, 255, false, SDL_FLIP_HORIZONTAL);
+			x, y, getWidth()*(74.0/64.0), getHeight(), 0.25f, 0, 255, true, SDL_FLIP_HORIZONTAL);
 	default:
 		break;
 	}
@@ -77,10 +78,30 @@ void Player::update()
 {
 	m_pFiller->update();
 	m_pBorder->update();
+	setCurNode();
 }
 
 void Player::clean()
 {
+}
+
+void Player::setCurNode()
+{
+	float tempDistance = 0.0f;
+	for (auto pathnode : NDMA::getPathNodeVec())
+	{
+		float tempDis = Util::distance(this->getTransform()->position, pathnode->getTransform()->position);;
+		if (tempDistance == 0.0f)
+		{
+			tempDistance = tempDis;
+			m_curNode = pathnode;
+		}
+		else if (tempDis < tempDistance)
+		{
+			tempDistance = tempDis;
+			m_curNode = pathnode;
+		}
+	}
 }
 
 void Player::setAnimationState(const PlayerAnimationState new_state)
@@ -124,7 +145,18 @@ void Player::m_buildAnimations()
 	setAnimation(hitAnimation);
 }
 
-int Player::getDamage()
+int Player::getMeleeDamage()
 {
-	return m_playerDamage;
+	return PLAYERMELEEDAMAGE;
+}
+
+int Player::getRangeDamage()
+{
+	return PLAYERRANGEDAMAGE;
+}
+
+
+void Player::DecHP(int damage)
+{
+	m_curHealth -= damage;
 }

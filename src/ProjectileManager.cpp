@@ -1,29 +1,32 @@
 #include "ProjectileManager.h"
 
 ProjectileManager* ProjectileManager::s_pInstance = nullptr;
+//std::list<FireBall*> ProjectileManager::m_pFireBallPool;
 
-FireBall* ProjectileManager::generateFireball()
+const int FIREBALNUMBER = 40;
+
+ProjectileManager::ProjectileManager()
+{
+	
+}
+
+ProjectileManager::~ProjectileManager()
+= default;
+
+void ProjectileManager::Init()
+{
+	m_buildFireballPool();
+}
+
+void ProjectileManager::generateFireball()
 {
 	auto fireball = m_pFireBallPool.front();
 	fireball->setActive();
 	m_pFireBallPool.pop_front();
 	m_pFireBallPool.push_back(fireball);
-
-	return fireball;
 }
 
 void ProjectileManager::update()
-{
-	for (auto fireball: m_pFireBallPool)
-	{
-		if (fireball->IsActive())
-		{
-			fireball->draw();
-		}
-	}
-}
-
-void ProjectileManager::draw()
 {
 	for (auto fireball : m_pFireBallPool)
 	{
@@ -34,19 +37,22 @@ void ProjectileManager::draw()
 	}
 }
 
-ProjectileManager::ProjectileManager():m_FireballNumber(20)
+void ProjectileManager::draw()
 {
-	m_buildFireballPool();
+	for (auto fireball: m_pFireBallPool)
+	{
+		if (fireball->IsActive())
+		{
+			fireball->draw();
+		}
+	}
 }
-
-ProjectileManager::~ProjectileManager()
-= default;
 
 void ProjectileManager::m_buildFireballPool()
 {
 	m_pFireBallPool = std::list<FireBall*>();
 
-	for (int count = 0; count < m_FireballNumber; count++)
+	for (int count = 0; count < FIREBALNUMBER; count++)
 	{
 		m_pFireBallPool.push_back(new FireBall());
 	}

@@ -167,6 +167,7 @@
     <ClCompile Include="..\src\HealthBarBorder.cpp" />
     <ClCompile Include="..\src\HealthBarFiller.cpp" />
     <ClCompile Include="..\src\DestructibleObstacle.cpp" />
+    <ClCompile Include="..\src\NodeManager.cpp" />
     <ClCompile Include="..\src\PathManager.cpp" />
     <ClCompile Include="..\src\PathNode.cpp" />
     <ClCompile Include="..\src\ProjectileManager.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="..\src\HealthBarBorder.h" />
     <ClInclude Include="..\src\HealthBarFiller.h" />
     <ClInclude Include="..\src\DestructibleObstacle.h" />
+    <ClInclude Include="..\src\NodeManager.h" />
     <ClInclude Include="..\src\PathManager.h" />
     <ClInclude Include="..\src\PathNode.h" />
     <ClInclude Include="..\src\ProjectileManager.h" />

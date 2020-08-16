@@ -37,7 +37,7 @@ void Grass::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the ship
-	TextureManager::Instance()->draw("grass", x , y , getWidth(), getHeight(), 0, 255, false);
+	TextureManager::Instance()->draw("grass", x , y , getWidth(), getHeight(), 0, 255, true);
 }
 
 void Grass::update()
@@ -66,7 +66,7 @@ void Brick::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the ship
-	TextureManager::Instance()->draw("brick", x , y , getWidth(), getHeight(), 0, 255, false);
+	TextureManager::Instance()->draw("brick", x , y , getWidth(), getHeight(), 0, 255, true);
 }
 
 void Brick::update()

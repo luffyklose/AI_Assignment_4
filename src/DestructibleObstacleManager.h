@@ -11,10 +11,12 @@ public:
 		return s_pInstance;
 	}
 
-	DestructibleObstacle* generateObstacle();
+	void generateObstacle();
 
 	void update();
 	void draw();
+	void Init();
+	std::list<DestructibleObstacle*> getDesObsList() { return m_pDestructibleObjectPool; }
 	
 private:
 	DestructibleObstacleManager();
@@ -22,7 +24,7 @@ private:
 
 	void m_buildDestructibleObjects();
 
-	int m_desctructileObjectNumber;
+	//int m_desctructileObjectNumber;
 	std::list<DestructibleObstacle*> m_pDestructibleObjectPool;
 
 	static DestructibleObstacleManager* s_pInstance;
