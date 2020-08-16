@@ -18,9 +18,11 @@ public:
 
 	Scene* getParent() const;
 	void setParent(Scene* parent);
+	bool isActive() { return m_bIsActive; }
 
-private:
+protected:
 	Scene* m_pParentScene{};
+	bool m_bIsActive;
 };
 
 #endif /* defined (__DISPLAY_OBJECT__) */

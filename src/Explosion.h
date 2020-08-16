@@ -15,7 +15,7 @@ public:
 	void reset();
 
 	//gettts and setters
-	bool isActive();
+	//bool isActive();
 	void setActive();
 	
 private:
@@ -23,6 +23,6 @@ private:
 	int getMaxhealth() override;
 private:
 	//int m_currentFrame;
-	bool m_bIsActive;
+	//bool m_bIsActive;
 
 };

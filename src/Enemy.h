@@ -29,7 +29,7 @@ public:
 	std::vector<PathNode*> getPatrolPath() { return m_pPatrolPath; }
 	bool getDetect() { return m_DetectPlayer; }
 	std::vector<PathConnection*> getPath();
-	bool isActive() { return m_bIsActive; }
+	
 	
 	//setter
 	//void setStartNode(PathNode* start) { start_point = start; }
@@ -62,8 +62,7 @@ protected:
 	int	m_detectionRadius;
 	bool m_isPatrol,
 		m_hasLOS,
-		m_DetectPlayer,
-		m_bIsActive;
+		m_DetectPlayer;
 	
 	//PathNode* start_point, * end_point;
 	PathNode* m_targetNode,

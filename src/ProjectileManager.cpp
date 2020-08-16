@@ -30,7 +30,7 @@ void ProjectileManager::update()
 {
 	for (auto fireball : m_pFireBallPool)
 	{
-		if (fireball->IsActive())
+		if (fireball->isActive())
 		{
 			fireball->update();
 		}
@@ -41,7 +41,7 @@ void ProjectileManager::draw()
 {
 	for (auto fireball: m_pFireBallPool)
 	{
-		if (fireball->IsActive())
+		if (fireball->isActive())
 		{
 			fireball->draw();
 		}

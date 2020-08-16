@@ -21,13 +21,13 @@ public:
 
 	void reset();
 	
-	bool isActive();
+	//bool isActive();
 	void setActive();
 	
 private:
 	const int ObstacleMaxHP = 50;
 	int m_curHP;
-	bool m_bIsActive;
+	//bool m_bIsActive;
 	
 	HealthBarBorder* m_pBorder;
 	HealthBarFiller* m_pFiller;

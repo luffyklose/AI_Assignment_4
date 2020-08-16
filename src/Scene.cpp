@@ -57,8 +57,19 @@ void Scene::updateDisplayList()
 	{
 		if (m_displayList[count] != nullptr)
 		{
-			m_displayList[count]->update();
-		}
+			if(m_displayList[count]->getType()== WARRIOR ||
+				m_displayList[count]->getType() == ARCHER ||
+				m_displayList[count]->getType() == FIREBALL ||
+				m_displayList[count]->getType() == OBSTACLE)
+			{
+				if(m_displayList[count]->isActive())
+					m_displayList[count]->update();
+			}
+			else
+			{
+				m_displayList[count]->update();
+			}
+		}		
 	}	
 }
 
@@ -69,12 +80,18 @@ void Scene::drawDisplayList()
 	{
 		if (m_displayList[count] != nullptr)
 		{
-			/*std::cout << count << std::endl;
-			if(m_displayList[count]==nullptr)
+			if (m_displayList[count]->getType() == WARRIOR ||
+				m_displayList[count]->getType() == ARCHER ||
+				m_displayList[count]->getType() == FIREBALL ||
+				m_displayList[count]->getType() == OBSTACLE)
 			{
-				std::cout << "cannot draw" << std::endl;
-			}*/
-			m_displayList[count]->draw();
+				if (m_displayList[count]->isActive())
+					m_displayList[count]->draw();
+			}
+			else
+			{
+				m_displayList[count]->draw();
+			}
 		}
 	}
 

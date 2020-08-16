@@ -1,7 +1,7 @@
 #include "Explosion.h"
 #include "TextureManager.h"
 
-Explosion::Explosion():m_bIsActive(false)
+Explosion::Explosion()
 {
 	TextureManager::Instance()->loadSpriteSheet(
 		"../Assets/sprites/atlas.txt",
@@ -61,10 +61,10 @@ void Explosion::reset()
 	
 }
 
-bool Explosion::isActive()
-{
-	return m_bIsActive;
-}
+//bool Explosion::isActive()
+//{
+//	return m_bIsActive;
+//}
 
 void Explosion::setActive()
 {

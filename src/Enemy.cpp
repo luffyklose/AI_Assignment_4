@@ -13,12 +13,10 @@ Enemy::Enemy(Player* player)
 	//start_point->getTransform()->position = glm::vec2(0.0f,0.0f);
 	//end_point->getTransform()->position = glm::vec2(0.0f, 0.0f);
 
-	m_isPatrol = false;
+	//m_isPatrol = false;
 	m_curHealth = ENEMYMAXHEALTH;
 	m_pTargetPlayer = player;
-	m_pFleeNode = nullptr;
-
-	
+	m_pFleeNode = nullptr;	
 }
 
 Enemy::~Enemy()
@@ -103,7 +101,7 @@ void Enemy::detectPlayer(Sprite* player)
 {
 	m_DetectPlayer = CollisionManager::circleRectCheck(this->getTransform()->position, (float)m_detectionRadius, 
 		player->getTransform()->position - glm::vec2(0.5f * player->getWidth(), 0.5f * player->getHeight()), player->getWidth(), player->getHeight());
-	std::cout <<"Detect: "<< m_DetectPlayer << std::endl;
+	//std::cout <<"Detect: "<< m_DetectPlayer << std::endl;
 }
 
 std::vector<PathConnection*> Enemy::getPath()

@@ -5,6 +5,7 @@
 #include "glm/gtx/string_cast.hpp"
 #include "Renderer.h"
 #include "EventManager.h"
+#include "TextureManager.h"
 
 
 Game* Game::s_pInstance = nullptr;

@@ -66,10 +66,10 @@ void DestructibleObstacle::reset()
 	}
 }
 
-bool DestructibleObstacle::isActive()
-{
-	return m_bIsActive;
-}
+//bool DestructibleObstacle::isActive()
+//{
+//	return m_bIsActive;
+//}
 
 void DestructibleObstacle::setActive()
 {

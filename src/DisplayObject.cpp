@@ -1,7 +1,9 @@
 #include "DisplayObject.h"
 
 DisplayObject::DisplayObject()
-= default;
+{
+	m_bIsActive = false;
+}
 
 DisplayObject::~DisplayObject()
 = default;

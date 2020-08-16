@@ -34,8 +34,8 @@ void EnemyManager::generateArcher()
 	archer->AddKeyNode(NDMA::getPathNodeVec()[70]);
 	archer->AddKeyNode(NDMA::getPathNodeVec()[130]);
 	archer->AddKeyNode(NDMA::getPathNodeVec()[180]);*/
-	archer->AddKeyNode(NDMA::getPathNodeVec()[0]);
-	archer->AddKeyNode(NDMA::getPathNodeVec()[19]);
+	archer->AddKeyNode(NDMA::getPathNodeVec()[20]);
+	archer->AddKeyNode(NDMA::getPathNodeVec()[39]);
 	archer->AddKeyNode(NDMA::getPathNodeVec()[79]);
 	archer->AddKeyNode(NDMA::getPathNodeVec()[60]);
 

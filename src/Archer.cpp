@@ -6,8 +6,8 @@
 #include "SoundManager.h"
 
 const int SHOOTRANGE = 200;
-const int MELEEDAMAGE = 20;
-const int MELEECD = 100;
+const int SHOOTDAMAGE = 20;
+const int SHOOTCD = 100;
 const int DETECTRANGE = 300;
 
 Archer::Archer(Player* player):Enemy(player)
@@ -87,12 +87,14 @@ void Archer::update()
 		M_withinShootRange = false;
 
 	m_shootCounter++;
+	detectPlayer(m_pTargetPlayer);
 
+	std::cout <<"Before Update:"<< m_attackMode << " " << m_DetectPlayer << " " << m_hasLOS << std::endl;
 	m_checkCurrentConditions();
 	//std::cout << m_outerState << " " << m_innerState << std::endl;
 	m_stateMachineUpdate();
+	std::cout << "After Update:" << m_attackMode << " " << m_DetectPlayer << " " << m_hasLOS << std::endl;
 
-	m_shootCounter++;
 
 	m_pFiller->update();
 	m_pBorder->update();
@@ -186,7 +188,7 @@ void Archer::m_checkCurrentConditions()
 					if(!m_hasLOS)
 					{
 						m_attackMode = true;
-						std::cout << "set attack mode" << std::endl;
+						std::cout << "set attack mode to " << m_attackMode<< std::endl;
 						if(M_withinShootRange)
 						{
 							m_innerState = RANGED_ATTACK;
@@ -203,7 +205,7 @@ void Archer::m_checkCurrentConditions()
 				}
 				else
 				{
-					std::cout << m_attackMode << " " << m_DetectPlayer << " "<<m_hasLOS<<std::endl;
+					//std::cout << m_attackMode << " " << m_DetectPlayer << " "<<m_hasLOS<<std::endl;
 					m_innerState = PATROL;
 				}
 			}
@@ -232,7 +234,7 @@ void Archer::m_stateMachineUpdate()
 			}
 			case RANGED_ATTACK:
 			{
-				// Perform Melee Attack Action
+				// Perform Range Attack Action
 				Shoot();
 				std::cout << "Shooting..." << std::endl;
 				break;
@@ -246,7 +248,7 @@ void Archer::m_stateMachineUpdate()
 			}
 			case MOVE_TO_RANGED:
 			{
-				// Move 2 Melee Range Action
+				// Move 2 Range Range Action
 				Move2NearestAttackNode();
 				std::cout << "Moving to Attack..." << std::endl;
 				break;
@@ -321,12 +323,12 @@ void Archer::Move2NearestAttackNode()
 	{
 		SetNextNode();
 	}
-	std::cout << "After: " << M_withinShootRange << std::endl;
+	std::cout << "In Range? After: " << M_withinShootRange << std::endl;
 }
 
 void Archer::Shoot()
 {
-	if (m_shootCounter < MELEECD)
+	if (m_shootCounter < SHOOTCD)
 		return;
 	m_shootCounter = 0;
 	ProjectileManager::Instance()->generateFireball();

@@ -77,7 +77,7 @@ void PlayScene::update()
 	
 	for(auto m_pEnemy : EnemyManager::Instance()->getEnemyVec())
 	{
-		m_pEnemy->detectPlayer(m_pPlayer);
+		//m_pEnemy->detectPlayer(m_pPlayer);
 		for (int i=0;i<(int)m_obstacleVec.size();i++)
 		{
 			m_pEnemy->setHasLOS(CollisionManager::LOSCheck(m_pPlayer, m_pEnemy, m_obstacleVec[i]));

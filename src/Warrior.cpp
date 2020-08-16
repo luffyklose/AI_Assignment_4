@@ -27,7 +27,7 @@ Warrior::Warrior(Player* player):Enemy(player)
 	setHeight(40);
 
 	//alt pending
-	//getTransform()->position = glm::vec2(x,y);
+	//getTransform()->position = glm::vec2(-1000,-1000);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
@@ -91,6 +91,7 @@ void Warrior::update()
 	else
 		m_withinMeleeRange = false;
 
+	detectPlayer(m_pTargetPlayer);
 	m_checkCurrentConditions();
 	//std::cout << m_outerState << " " << m_innerState << std::endl;
 	m_stateMachineUpdate();
@@ -212,7 +213,7 @@ void Warrior::m_checkCurrentConditions()
 			if (!m_hasLOS)
 			{
 				// check the distance
-				std::cout << "In Melee Range: " << m_withinMeleeRange << std::endl;
+				//std::cout << "In Melee Range: " << m_withinMeleeRange << std::endl;
 				if (m_withinMeleeRange)
 				{
 					m_innerState = MELEE_ATTACK;
@@ -517,12 +518,12 @@ void Warrior::Melee()
 
 void Warrior::reset()
 {
-	if (m_bIsActive == true)
-	{
+	//if (m_bIsActive == true)
+	//{
 		getTransform()->position.x = -1000;
 		getTransform()->position.y = -1000;
 		m_bIsActive = false;
-	}
+	//}
 }
 
 void Warrior::setActive()

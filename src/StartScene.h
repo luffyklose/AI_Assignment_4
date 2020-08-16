@@ -4,7 +4,6 @@
 
 #include "Scene.h"
 #include "Label.h"
-#include "ship.h"
 #include "Button.h"
 
 class StartScene final : public Scene
@@ -25,7 +24,6 @@ private:
 	Label* m_pInstructionsLabel{};
 	Label* m_pNameLabel{};
 
-	Ship* m_pShip{};
 
 	Button* m_pStartButton;
 };

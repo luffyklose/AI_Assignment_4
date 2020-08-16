@@ -16,6 +16,8 @@ FireBall::FireBall() :m_face(1),m_damage(50),m_speed(10)
 	// set frame height
 	setHeight(16);
 
+	setType(FIREBALL);
+
 	//getTransform()->position = glm::vec2(x, y);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
