@@ -1,0 +1,12 @@
+slime-idle-0 0 0 32 32
+slime-idle-1 32 0 32 32
+slime-idle-2 64 0 32 32
+slime-idle-3 96 0 32 32
+slime-run-0 0 32 32 32
+slime-run-1 32 32 32 32
+slime-run-2 64 32 32 32
+slime-run-3 96 32 32 32
+slime-run-4 128 32 32 32
+slime-run-5 160 32 32 32
+slime-run-6 192 32 32 32
+slime-run-7 224 32 32 32

@@ -1,0 +1,7 @@
+fireball-fire-0 0 0 32 32
+fireball-fire-1 32 0 32 32 
+fireball-fire-2 64 0 32 32
+fireball-fire-3 96 0 32 32 
+fireball-fire-4 128 0 32 32
+fireball-fire-5 160 0 32 32
+fireball-fire-6 192 0 32 32
