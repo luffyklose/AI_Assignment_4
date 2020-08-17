@@ -3,6 +3,7 @@
 #include "PathManager.h"
 #include "Util.h"
 #include"CollisionManager.h"
+#include "ExplosionManager.h"
 #include "NodeManager.h"
 #include"PlayScene.h"
 
@@ -28,6 +29,9 @@ void Enemy::DecHP(int damage)
 	if (m_curHealth < 0)
 	{
 		m_curHealth = 0;
+		ExplosionManager::Instance()->generateExplosion();
+		auto explosion = ExplosionManager::Instance()->getExplosionList().back();
+		explosion->getTransform()->position = this->getTransform()->position;
 		reset();
 	}
 }
@@ -215,13 +219,16 @@ void Enemy::Flee()
 	std::cout << "flee to " << m_pFleeNode->getTransform()->position.x << " " << m_pFleeNode->getTransform()->position.y << std::endl;
 	if (Util::distance(this->getTransform()->position, m_pFleeNode->getTransform()->position) < 6.0f)
 	{
+		reset();
 		return;
 	}
 	if (m_pTargetPathNode != m_pFleeNode)
 	{
 		m_pTargetPathNode = m_pFleeNode;
 		if (m_currentNode == m_pTargetPathNode)
+		{			
 			return;
+		}			
 		PathManager::GetShortestPath(m_currentNode, m_pTargetPathNode);
 		m_path = PathManager::getPath();
 		m_currentNode = m_path.front()->GetFromNode();

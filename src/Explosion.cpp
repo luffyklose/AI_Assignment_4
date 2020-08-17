@@ -11,10 +11,10 @@ Explosion::Explosion()
 	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("spritesheet"));
 
 	// set frame width
-	setWidth(51);
+	setWidth(30);
 
 	// set frame height
-	setHeight(52);
+	setHeight(30);
 
 	getTransform()->position = glm::vec2(200.0f, 200.0f);
 	//setType(EXPLOSION);
@@ -52,13 +52,9 @@ void Explosion::clean()
 
 void Explosion::reset()
 {
-	if(m_bIsActive==true)
-	{
 		getTransform()->position.x = -1000;
 		getTransform()->position.y = -1000;
 		m_bIsActive = false;
-	}
-	
 }
 
 //bool Explosion::isActive()

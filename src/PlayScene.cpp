@@ -9,7 +9,9 @@
 #include "ProjectileManager.h"
 #include"SoundManager.h"
 #include "EnemyManager.h"
+#include "ExplosionManager.h"
 #include "NodeManager.h"
+#include "PortalManager.h"
 
 //std::vector<PathNode*> PlayScene::m_pathNodeVec;
 
@@ -38,9 +40,9 @@ void PlayScene::draw()
 			Util::DrawCircle(m_pEnemy->getTransform()->position, m_pEnemy->getDetectionRadius(), CircleColour);
 		}
 
-		/*for(auto m_pObstacle:m_obstacleVec)
+		/*for(auto m_pStean:m_obstacleVec)
 		{
-			Util::DrawRect(m_pObstacle->getTransform()->position - glm::vec2(m_pObstacle->getWidth() * 0.5f, m_pObstacle->getHeight() * 0.5f), m_pObstacle->getWidth(), m_pObstacle->getHeight());
+			Util::DrawRect(m_pStean->getTransform()->position - glm::vec2(m_pStean->getWidth() * 0.5f, m_pStean->getHeight() * 0.5f), m_pStean->getWidth(), m_pStean->getHeight());
 
 		}*/
 
@@ -85,6 +87,24 @@ void PlayScene::update()
 			}
 		}
 
+		for(auto stean:DestructibleObstacleManager::Instance()->getSteanVec())
+		{
+			if(CollisionManager::AABBCheck(fireball,stean))
+			{
+				int row = stean->getRow();
+				int col = stean->getCol();
+				stean->DecHP(m_pPlayer->getRangeDamage());
+				//std::cout << "Stean HP: " << stean->getCurHealth() << std::endl;
+				if(!stean->isActive())
+				{
+					AddPathNode(m_level[row][col]);
+					AddSingleNodeConnection(row, col);
+				}
+				//std::cout << "Stean " << stean->isActive() << std::endl;
+				fireball->setIsActive(false);
+			}
+		}
+
 		if (fireball->getTransform()->position.x<-0.5f * fireball->getWidth() ||
 			fireball->getTransform()->position.x > Config::SCREEN_WIDTH + 0.5f * fireball->getWidth() ||
 			fireball->getTransform()->position.y < -0.5f * fireball->getHeight() ||
@@ -106,6 +126,15 @@ void PlayScene::update()
 		{
 			if (CollisionManager::AABBCheck(fireball, obstacle))
 			{
+				fireball->setIsActive(false);
+			}
+		}
+
+		for (auto stean : DestructibleObstacleManager::Instance()->getSteanVec())
+		{
+			if (CollisionManager::AABBCheck(fireball, stean))
+			{
+				stean->DecHP(20);
 				fireball->setIsActive(false);
 			}
 		}
@@ -149,7 +178,8 @@ void PlayScene::update()
 	
 	//RemoveNullObject();
 	EnemyManager::Instance()->RemoveInvalid();
-	ProjectileManager::Instance()->RemoveInvalid();	
+	ProjectileManager::Instance()->RemoveInvalid();
+	DestructibleObstacleManager::Instance()->RemoveInvalid();
 }
 
 void PlayScene::clean()
@@ -160,6 +190,7 @@ void PlayScene::clean()
 	}
 	EnemyManager::Instance()->exit();
 	ProjectileManager::Instance()->exit();
+	DestructibleObstacleManager::Instance()->exit();
 	removeNullPointer();
 }
 
@@ -209,7 +240,10 @@ void PlayScene::handleEvents()
 	// handle player movement if no Game Controllers found
 	if (SDL_NumJoysticks() < 1)
 	{
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(-5.0f, 0.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.x > 0.5f * m_pPlayer->getWidth())
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A) &&
+			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(-5.0f, 0.0f), m_obstacleVec) &&
+			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(-5.0f, 0.0f), DestructibleObstacleManager::Instance()->getSteanVec()) &&
+			m_pPlayer->getTransform()->position.x > 0.5f * m_pPlayer->getWidth())
 		{
 			m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
 			m_pPlayer->setDirection(Sprite::left);
@@ -219,7 +253,10 @@ void PlayScene::handleEvents()
 			m_pPlayer->getRigidBody()->velocity *= m_pPlayer->getRigidBody()->velocity * 0.9f;
 			SoundManager::Instance().playSound("step", 0, -1);
 		}
-		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(5.0f, 0.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.x < Config::SCREEN_WIDTH - 0.5f * m_pPlayer->getWidth())
+		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D) && 
+			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(5.0f, 0.0f), m_obstacleVec) &&
+			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(5.0f, 0.0f), DestructibleObstacleManager::Instance()->getSteanVec()) &&
+			m_pPlayer->getTransform()->position.x < Config::SCREEN_WIDTH - 0.5f * m_pPlayer->getWidth())
 		{
 			m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
 			m_pPlayer->setDirection(Sprite::right);
@@ -229,7 +266,10 @@ void PlayScene::handleEvents()
 			m_pPlayer->getRigidBody()->velocity *= m_pPlayer->getRigidBody()->velocity * 0.9f;
 			SoundManager::Instance().playSound("step", 0, -1);
 		}
-		else if(EventManager::Instance().isKeyDown(SDL_SCANCODE_W) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, -5.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.y > 0.5f * m_pPlayer->getHeight())
+		else if(EventManager::Instance().isKeyDown(SDL_SCANCODE_W) && 
+			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, -5.0f), m_obstacleVec) &&
+			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, -5.0f), DestructibleObstacleManager::Instance()->getSteanVec()) &&
+			m_pPlayer->getTransform()->position.y > 0.5f * m_pPlayer->getHeight())
 		{
 			m_pPlayer->setDirection(Sprite::up);
 			
@@ -238,7 +278,10 @@ void PlayScene::handleEvents()
 			m_pPlayer->getRigidBody()->velocity *= m_pPlayer->getRigidBody()->velocity * 0.9f;
 			SoundManager::Instance().playSound("step", 0, -1);
 		}
-		else if(EventManager::Instance().isKeyDown(SDL_SCANCODE_S) && !CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, 5.0f), m_obstacleVec) && m_pPlayer->getTransform()->position.y < Config::SCREEN_HEIGHT - 0.5f * m_pPlayer->getHeight())
+		else if(EventManager::Instance().isKeyDown(SDL_SCANCODE_S) && 
+			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, 5.0f), m_obstacleVec) &&
+			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, 5.0f), DestructibleObstacleManager::Instance()->getSteanVec()) &&
+			m_pPlayer->getTransform()->position.y < Config::SCREEN_HEIGHT - 0.5f * m_pPlayer->getHeight())
 		{
 			m_pPlayer->setDirection(Sprite::down);
 			
@@ -466,16 +509,21 @@ void PlayScene::LoadMap()
 				{
 				case 'g':
 					{
-					m_level[row][col] = new Grass(40.0f * col + 0.5 * Config::TILE_SIZE, 40.0f * row + 0.5 * Config::TILE_SIZE);
+					m_level[row][col] = new Grass(40.0f * col + 0.5 * Config::TILE_SIZE, 40.0f * row + 0.5 * Config::TILE_SIZE,row,col);
 					//std::cout << "Grass: " << m_level[row][col]->getTransform()->position.x << " " << m_level[row][col]->getTransform()->position.y << std::endl;
 					break;
 					}
 				case 'b':
 					{
-					m_level[row][col] = new Brick(40.0f * col + 0.5 * Config::TILE_SIZE, 40.0f * row + 0.5 * Config::TILE_SIZE);
+					m_level[row][col] = new Brick(40.0f * col + 0.5 * Config::TILE_SIZE, 40.0f * row + 0.5 * Config::TILE_SIZE, row, col);
 					m_obstacleVec.push_back(m_level[row][col]);
 					//std::cout << "DestructibleObstacle Size: " << m_obstacleVec.size() << std::endl;
 					//std::cout << "Brick: " << m_level[row][col]->getTransform()->position.x << " " << m_level[row][col]->getTransform()->position.y << std::endl;
+					break;
+					}
+				case 's':
+					{
+					m_level[row][col] = new SteanTile(40.0f * col + 0.5 * Config::TILE_SIZE, 40.0f * row + 0.5 * Config::TILE_SIZE, row, col);
 					break;
 					}
 					default:break;
@@ -483,7 +531,7 @@ void PlayScene::LoadMap()
 				addChild(m_level[row][col]);
 				//std::cout << "Tile: " << m_level[row][col]->getTransform()->position.x << " " << m_level[row][col]->getTransform()->position.y << std::endl;
 				// Construct the Node for a valid tile.
-				if (!m_level[row][col]->IsObstacle() && !m_level[row][col]->IsHazard())
+				if (!m_level[row][col]->IsObstacle() && !m_level[row][col]->IsHazard() && !m_level[row][col]->HasObstacle())
 				{
 					m_level[row][col]->m_node = new PathNode();
 					m_level[row][col]->m_node->getTransform()->position.x = m_level[row][col]->getTransform()->position.x;
@@ -498,30 +546,61 @@ void PlayScene::LoadMap()
 	}
 }
 
+void PlayScene::AddPathNode(Tile* tile)
+{
+	tile->m_node = new PathNode();
+	tile->m_node->getTransform()->position.x = tile->getTransform()->position.x;
+	tile->m_node->getTransform()->position.y = tile->getTransform()->position.y;
+	NDMA::AddPathNode(tile->m_node);
+	m_pathNodeNum++;
+}
+
+void PlayScene::AddSingleNodeConnection(int row,int col)
+{
+	if (m_level[row][col]->Node() == nullptr) // Now we can test for nullptr.
+		return; // An obstacle or hazard tile has no connections.
+	// Make valid connections. Inside map and a valid tile.
+	if (row - 1 != -1 && m_level[row - 1][col]->Node() != nullptr) // Tile above. 
+		m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row - 1][col]->Node(),
+			Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row - 1][col]->Node()->getTransform()->position)));
+	if (row + 1 != Config::ROW_NUM && m_level[row + 1][col]->Node() != nullptr) // Tile below.
+		m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row + 1][col]->Node(),
+			Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row + 1][col]->Node()->getTransform()->position)));
+	if (col - 1 != -1 && m_level[row][col - 1]->Node() != nullptr) // Tile to Left.
+		m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col - 1]->Node(),
+			Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row][col - 1]->Node()->getTransform()->position)));
+	if (col + 1 != Config::COL_NUM && m_level[row][col + 1]->Node() != nullptr) // Tile to right.
+		m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col + 1]->Node(),
+			Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row][col + 1]->Node()->getTransform()->position)));
+}
+
 void PlayScene::AddConnection()
 {
 	for (int row = 0; row < Config::ROW_NUM; row++)
 	{
 		for (int col = 0; col < Config::COL_NUM; col++)
 		{
-			if (m_level[row][col]->Node() == nullptr) // Now we can test for nullptr.
-				continue; // An obstacle or hazard tile has no connections.
-			// Make valid connections. Inside map and a valid tile.
-			if (row - 1 != -1 && m_level[row - 1][col]->Node() != nullptr) // Tile above. 
-				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row - 1][col]->Node(),
-					Util::distance( m_level[row][col]->Node()->getTransform()->position, m_level[row-1][col]->Node()->getTransform()->position)));
-			if (row + 1 != Config::ROW_NUM && m_level[row + 1][col]->Node() != nullptr) // Tile below.
-				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row + 1][col]->Node(),
-					Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row + 1][col]->Node()->getTransform()->position)));
-			if (col - 1 != -1 && m_level[row][col - 1]->Node() != nullptr) // Tile to Left.
-				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col - 1]->Node(),
-					Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row][col - 1]->Node()->getTransform()->position)));
-			if (col + 1 != Config::COL_NUM && m_level[row][col + 1]->Node() != nullptr) // Tile to right.
-				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col + 1]->Node(),
-					Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row][col + 1]->Node()->getTransform()->position)));
+			AddSingleNodeConnection(row,col);
+			//if (m_level[row][col]->Node() == nullptr) // Now we can test for nullptr.
+			//	continue; // An obstacle or hazard tile has no connections.
+			//// Make valid connections. Inside map and a valid tile.
+			//if (row - 1 != -1 && m_level[row - 1][col]->Node() != nullptr) // Tile above. 
+			//	m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row - 1][col]->Node(),
+			//		Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row - 1][col]->Node()->getTransform()->position)));
+			//if (row + 1 != Config::ROW_NUM && m_level[row + 1][col]->Node() != nullptr) // Tile below.
+			//	m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row + 1][col]->Node(),
+			//		Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row + 1][col]->Node()->getTransform()->position)));
+			//if (col - 1 != -1 && m_level[row][col - 1]->Node() != nullptr) // Tile to Left.
+			//	m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col - 1]->Node(),
+			//		Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row][col - 1]->Node()->getTransform()->position)));
+			//if (col + 1 != Config::COL_NUM && m_level[row][col + 1]->Node() != nullptr) // Tile to right.
+			//	m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col + 1]->Node(),
+			//		Util::distance(m_level[row][col]->Node()->getTransform()->position, m_level[row][col + 1]->Node()->getTransform()->position)));
 		}
 	}
 }
+
+
 
 void PlayScene::setGridLOS()
 {
@@ -598,13 +677,33 @@ void PlayScene::start()
 	m_pKPressed = false;
 	m_pPPressed = false;
 	m_pathNodeNum = 0;
+
+	//set stean
+	DestructibleObstacleManager::Instance()->Init();
+	for (auto stean : DestructibleObstacleManager::Instance()->getDesObsList())
+	{
+		addChild(stean);
+	}
 	
 	//buildGrid();
 	LoadMap();
 	AddConnection();
 	NDMA::AddFleeNode(NDMA::getPathNodeVec()[0]);
 
-	// Set Enemy
+	//set portal
+	PortalManager::Instance()->CreateCreatePortal(NDMA::getPathNodeVec()[20]->getTransform()->position);
+	PortalManager::Instance()->CreateCreatePortal(NDMA::getPathNodeVec()[50]->getTransform()->position);
+	PortalManager::Instance()->CreateFleePortal(NDMA::getPathNodeVec()[0]->getTransform()->position);
+	for (auto portal : PortalManager::Instance()->getCreatePortalVec())
+	{
+		addChild(portal);
+	}
+	for (auto portal : PortalManager::Instance()->getFleePortalVec())
+	{
+		addChild(portal);
+	}
+	
+	// Set Player
 	m_pPlayer = new Player(100.0f, 500.0f);
 	addChild(m_pPlayer);	
 
@@ -621,7 +720,6 @@ void PlayScene::start()
 	}
 	
 	//EnemyManager::Instance()->generateWarrior();
-	//std::cout << "Enemy Number: " << EnemyManager::getEnemyVec().size() << std::endl;
 	
 	EnemyManager::Instance()->generateArcher();
 
@@ -632,12 +730,22 @@ void PlayScene::start()
 		addChild(fireball);
 	}
 
+	//set explosion
+	ExplosionManager::Instance()->Init();
+	for(auto explosion:ExplosionManager::Instance()->getExplosionList())
+	{
+		addChild(explosion);
+	}
+
 	//Set destructible Obstacle
 	DestructibleObstacleManager::Instance()->Init();
 	for(auto obstacle:DestructibleObstacleManager::Instance()->getDesObsList())
 	{
 		addChild(obstacle);
 	}
+
+	
+	
 	
 	//m_playerFacingRight = true;
 

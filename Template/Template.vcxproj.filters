@@ -105,9 +105,6 @@
     <ClCompile Include="..\src\Tile.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\TileManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\PathManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
@@ -148,6 +145,12 @@
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ExplosionManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Portal.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PortalManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -266,9 +269,6 @@
     <ClInclude Include="..\src\Tile.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\TileManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\PathManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
@@ -305,9 +305,6 @@
     <ClInclude Include="..\src\DestructibleObstacleManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="ObstacleManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\NodeManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
@@ -315,6 +312,12 @@
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ExplosionManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Portal.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PortalManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>

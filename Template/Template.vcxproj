@@ -170,11 +170,12 @@
     <ClCompile Include="..\src\NodeManager.cpp" />
     <ClCompile Include="..\src\PathManager.cpp" />
     <ClCompile Include="..\src\PathNode.cpp" />
+    <ClCompile Include="..\src\Portal.cpp" />
+    <ClCompile Include="..\src\PortalManager.cpp" />
     <ClCompile Include="..\src\ProjectileManager.cpp" />
     <ClCompile Include="..\src\Sprite.cpp" />
     <ClCompile Include="..\src\StateMachine.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
-    <ClCompile Include="..\src\TileManager.cpp" />
     <ClCompile Include="..\src\UIControl.cpp" />
     <ClCompile Include="..\src\DisplayObject.cpp" />
     <ClCompile Include="..\src\EndScene.cpp" />
@@ -217,12 +218,13 @@
     <ClInclude Include="..\src\NodeManager.h" />
     <ClInclude Include="..\src\PathManager.h" />
     <ClInclude Include="..\src\PathNode.h" />
+    <ClInclude Include="..\src\Portal.h" />
+    <ClInclude Include="..\src\PortalManager.h" />
     <ClInclude Include="..\src\ProjectileManager.h" />
     <ClInclude Include="..\src\SoundType.h" />
     <ClInclude Include="..\src\Sprite.h" />
     <ClInclude Include="..\src\StateMachine.h" />
     <ClInclude Include="..\src\Tile.h" />
-    <ClInclude Include="..\src\TileManager.h" />
     <ClInclude Include="..\src\UIControl.h" />
     <ClInclude Include="..\src\DisplayObject.h" />
     <ClInclude Include="..\src\EndScene.h" />
@@ -252,7 +254,6 @@
     <ClInclude Include="..\src\Transform.h" />
     <ClInclude Include="..\src\Util.h" />
     <ClInclude Include="..\src\Warrior.h" />
-    <ClInclude Include="ObstacleManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

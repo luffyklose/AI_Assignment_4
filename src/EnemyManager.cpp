@@ -52,10 +52,9 @@ void EnemyManager::generateWarrior()
 	m_pWarriorPool.push_back(warrior);
 	m_pEnemyVec.push_back(warrior);
 
-	warrior->AddKeyNode(NDMA::getPathNodeVec()[0]);
-	warrior->AddKeyNode(NDMA::getPathNodeVec()[19]);
-	warrior->AddKeyNode(NDMA::getPathNodeVec()[79]);
-	warrior->AddKeyNode(NDMA::getPathNodeVec()[60]);
+	warrior->AddKeyNode(NDMA::getPathNodeVec()[50]);
+	warrior->AddKeyNode(NDMA::getPathNodeVec()[70]);
+	warrior->AddKeyNode(NDMA::getPathNodeVec()[180]);
 
 	warrior->getTransform()->position = warrior->getKeyNode()[0]->m_keyNode->getTransform()->position;
 	warrior->getRigidBody()->maxSpeed = 5.0f;
@@ -137,6 +136,11 @@ void EnemyManager::RemoveInvalid()
 			++enemy;
 		}
 	}
+}
+
+void EnemyManager::addEnemy(Enemy* enemy)
+{
+	m_pEnemyVec.push_back(enemy);
 }
 
 void EnemyManager::m_buildWarriorPool()

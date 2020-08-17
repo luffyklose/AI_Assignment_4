@@ -482,7 +482,7 @@ bool CollisionManager::PlayerCollision(Player* player, glm::vec2 velocity, std::
 		
 		if(AABBCheck(tempRect1,tempRect2))
 		{
-			std::cout << "Collision!" << std::endl;
+			//std::cout << "Collision!" << std::endl;
 			return true;
 		}
 	}
@@ -501,6 +501,31 @@ bool CollisionManager::PlayerCollision(Player* player, glm::vec2 velocity, std::
 	//	}
 	//}
 	//return false;
+}
+
+bool CollisionManager::PlayerCollision(Player* player, glm::vec2 velocity,
+	std::vector<DestructibleObstacle*> obstacleVec)
+{
+	SDL_FRect tempRect1, tempRect2;
+	tempRect1.x = player->getTransform()->position.x + velocity.x;
+	tempRect1.y = player->getTransform()->position.y + velocity.y;
+	tempRect1.w = player->getWidth();
+	tempRect1.h = player->getHeight();
+
+	for (auto obstacle : obstacleVec)
+	{
+		tempRect2.x = obstacle->getTransform()->position.x;
+		tempRect2.y = obstacle->getTransform()->position.y;
+		tempRect2.w = obstacle->getWidth();
+		tempRect2.h = obstacle->getHeight();
+
+		if (AABBCheck(tempRect1, tempRect2))
+		{
+			//std::cout << "Collision!" << std::endl;
+			return true;
+		}
+	}
+	return false;
 }
 
 void CollisionManager::CheckMapCollision(Player* player, std::vector<Tile*> obstacleVec)

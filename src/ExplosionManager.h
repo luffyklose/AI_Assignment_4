@@ -11,10 +11,15 @@ public:
 		return s_pInstance;
 	}
 
-	Explosion* getExplosion();
+	void generateExplosion();
 
 	void update();
 	void draw();
+	void Init();
+	void exit();
+	void RemoveInvalid();
+
+	std::list<Explosion*>getExplosionList() { return m_pExplosionPool; }
 	
 private:
 	ExplosionManager();
@@ -22,7 +27,6 @@ private:
 
 	void m_buildExplosionPool();
 
-	int m_explosionNumber;
 	std::list<Explosion*> m_pExplosionPool;
 	
 	static ExplosionManager* s_pInstance;

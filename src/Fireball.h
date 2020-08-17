@@ -19,6 +19,7 @@ public:
 	//bool IsActive() { return m_bIsActive; }
 	void setActive();
 	void setFace(int face);
+	void setIsActive(bool active) override;
 
 private:
 	void m_buildAnimations();

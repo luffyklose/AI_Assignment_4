@@ -7,14 +7,18 @@
 class Tile : public DisplayObject
 {
 public:
-	Tile( float x, float y);
+	Tile( float x, float y,int row,int col);
 	~Tile();
 	virtual void draw() = 0;
 	virtual void update() = 0;
 	virtual void clean() = 0;
-	
-	bool& IsObstacle() { return m_obstacle; }
+
+	//getter
+	bool IsObstacle() { return m_obstacle; }
 	bool IsHazard() { return m_hazard; }
+	bool HasObstacle() { return m_hasObstacle; }
+	int getRow() { return m_row; }
+	int getCol() { return m_col; }
 	
 	PathNode* Node() { return m_node; }
 	//virtual int getMaxhealth() = 0;
@@ -24,14 +28,15 @@ protected:
 	bool m_obstacle,
 		m_hazard,
 		m_hasObstacle;
+	int m_row, m_col;
 };
 
 class Grass: public Tile
 {
 public:
-	Grass(float x, float y);
+	Grass(float x, float y,int row,int col);
 
-	Grass* Clone() { return new Grass(getTransform()->position.x, getTransform()->position.y); }
+	//Grass* Clone() { return new Grass(getTransform()->position.x, getTransform()->position.y); }
 
 	void draw() override;
 	void update() override;
@@ -49,8 +54,8 @@ private:
 class Brick : public Tile
 {
 public:
-	Brick(float x, float y);
-	Brick* Clone() { return new Brick(getTransform()->position.x, getTransform()->position.y); }
+	Brick(float x, float y, int row, int col);
+	//Brick* Clone() { return new Brick(getTransform()->position.x, getTransform()->position.y); }
 	
 	void draw() override;
 	void update() override;
@@ -65,11 +70,11 @@ private:
 	//const int brickHP = 50;
 };
 
-class BarrelTile:public Tile
+class SteanTile:public Tile
 {
 public:
-	BarrelTile(float x, float y);
-	//BarrelTile* Clone() { return new BarrelTile(getTransform()->position.x, getTransform()->position.y); }
+	SteanTile(float x, float y, int row, int col);
+	//SteanTile* Clone() { return new SteanTile(getTransform()->position.x, getTransform()->position.y); }
 
 	void draw() override;
 	void update() override;
@@ -83,5 +88,5 @@ public:
 private:
 	//const int brickHP = 50;
 	Tile* m_pGrass;
-	DestructibleObstacle* m_pObstacle;
+	DestructibleObstacle* m_pStean;
 };

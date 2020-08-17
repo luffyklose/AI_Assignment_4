@@ -118,6 +118,7 @@ void Player::m_buildAnimations()
 	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-idle-1"));
 	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-idle-2"));
 	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-idle-3"));
+	
 	setAnimation(idleAnimation);
 
 	Animation walkAnimation = Animation();

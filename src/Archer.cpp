@@ -40,10 +40,7 @@ Archer::Archer(Player* player):Enemy(player)
 	m_accel = 0.2;
 	m_velMax = 2.0;
 
-
-
 	m_buildAnimations();
-
 	reset();
 }
 

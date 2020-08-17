@@ -38,6 +38,8 @@ private:
 	void DrawPath();
 	void LoadMap();
 	void AddConnection();
+	void AddPathNode(Tile* tile);
+	void AddSingleNodeConnection(int row,int col);
 	PathNode* getPathNode(int x, int y);
 public:
 	
@@ -59,10 +61,10 @@ private:
 
 	int m_pathNodeNum;
 
-	//Obstacle* m_pObstacle;
+	//Obstacle* m_pStean;
 	//static std::vector<PathNode*> m_pathNodeVec;
 
-	//DestructibleObstacle* m_pObstacle;
+	//DestructibleObstacle* m_pStean;
 
 	//std::vector<Enemy*> m_enemyVec;
 	//std::vector<DestructibleObstacle*> m_obstacleVec;

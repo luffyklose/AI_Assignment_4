@@ -1,5 +1,7 @@
 ﻿#include "Fireball.h"
 
+
+#include "ExplosionManager.h"
 #include "TextureManager.h"
 
 FireBall::FireBall() :m_face(1),m_damage(50),m_speed(10)
@@ -130,4 +132,15 @@ void FireBall::m_buildAnimations()
 void FireBall::setFace(int face)
 {
 	m_face = face;
+}
+
+void FireBall::setIsActive(bool active)
+{
+	m_bIsActive = active;
+	if(active=false)
+	{
+		ExplosionManager::Instance()->generateExplosion();
+		auto explosion = ExplosionManager::Instance()->getExplosionList().back();
+		explosion->getTransform()->position = this->getTransform()->position;
+	}
 }

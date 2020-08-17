@@ -2,14 +2,23 @@
 
 ExplosionManager* ExplosionManager::s_pInstance = nullptr;
 
-Explosion* ExplosionManager::getExplosion()
+const int EXPLOSIONNUMBER = 20;
+
+ExplosionManager::ExplosionManager()
+{
+	m_buildExplosionPool();
+}
+
+ExplosionManager::~ExplosionManager()
+= default;
+
+void ExplosionManager::generateExplosion()
 {
 	auto explosion = m_pExplosionPool.front();
 	explosion->setActive();
 	m_pExplosionPool.pop_front();
 	m_pExplosionPool.push_back(explosion);
 
-	return explosion;
 }
 
 void ExplosionManager::update()
@@ -34,20 +43,44 @@ void ExplosionManager::draw()
 	}
 }
 
-ExplosionManager::ExplosionManager():m_explosionNumber(20)
+void ExplosionManager::Init()
 {
 	m_buildExplosionPool();
 }
 
-ExplosionManager::~ExplosionManager()
-= default;
+void ExplosionManager::exit()
+{
+	for (auto explosion : m_pExplosionPool)
+	{
+		delete explosion;
+		explosion = nullptr;
+	}
+	m_pExplosionPool.clear();
+}
+
+void ExplosionManager::RemoveInvalid()
+{
+	for (auto explosion = m_pExplosionPool.begin(); explosion != m_pExplosionPool.end();)
+	{
+		if (!(*explosion)->isActive())
+		{
+			explosion = m_pExplosionPool.erase(explosion);
+		}
+		else
+		{
+			++explosion;
+		}
+	}
+}
+
+
 
 void ExplosionManager::m_buildExplosionPool()
 {
 	//create the pool structure
 	m_pExplosionPool = std::list<Explosion*>();
 
-	for (int count = 0; count < m_explosionNumber;count++)
+	for (int count = 0; count < EXPLOSIONNUMBER;count++)
 	{
 		m_pExplosionPool.push_back(new Explosion());
 	}

@@ -1,18 +1,18 @@
 #include "DestructibleObstacle.h"
-
 #include "TextureManager.h"
+#include"ExplosionManager.h"
 
 DestructibleObstacle::DestructibleObstacle()
 {
-	TextureManager::Instance()->load("../Assets/textures/obstacle.png", "obstacle_fullHP");
-	TextureManager::Instance()->load("../Assets/textures/obstacle.png", "obstacle_halfHP");
+	TextureManager::Instance()->load("../Assets/textures/stean_full.png", "fullStean");
+	TextureManager::Instance()->load("../Assets/textures/stean_broken.png", "brokenStean");
 	
-	const auto size = TextureManager::Instance()->getTextureSize("obstacle");
-	//setWidth(w);
-	//setHeight(h);
-	
+	const auto size = TextureManager::Instance()->getTextureSize("fullStean");
+	setWidth(40);
+	setHeight(40);	
 
 	setType(OBSTACLE);
+	m_curHealth = STEANMAXHP;
 
 	reset();
 }
@@ -27,13 +27,13 @@ void DestructibleObstacle::draw()
 	const auto y = getTransform()->position.y;
 
 
-	if (m_curHP > ObstacleMaxHP / 2)
+	if (m_curHealth > STEANMAXHP / 2)
 	{
-		TextureManager::Instance()->draw("obstacle_fullHP", x, y, getWidth(), getHeight(), 0, 255, true);
+		TextureManager::Instance()->draw("fullStean", x, y, getWidth(), getHeight(), 0, 255, true);
 	}
 	else
 	{
-		TextureManager::Instance()->draw("obstacle_halfHP", x, y, getWidth(), getHeight(), 0, 255, true);
+		TextureManager::Instance()->draw("brokenStean", x, y, getWidth(), getHeight(), 0, 255, true);
 	}
 }
 
@@ -48,22 +48,23 @@ void DestructibleObstacle::clean()
 void DestructibleObstacle::DecHP(int damage)
 {
 	m_curHealth = m_curHealth - damage;
-	if (m_curHealth < 0)
+	if (m_curHealth <= 0)
 	{
-		m_curHealth = 0;
+		m_curHealth = 0;		
+		ExplosionManager::Instance()->generateExplosion();
+		auto explosion = ExplosionManager::Instance()->getExplosionList().back();
+		explosion->getTransform()->position = this->getTransform()->position;
 		reset();
 	}
 }
 
 void DestructibleObstacle::reset()
 {
-	if (m_bIsActive == true)
-	{
-		getTransform()->position.x = -1000;
-		getTransform()->position.y = -1000;
-		m_bIsActive = false;
-		m_curHP = ObstacleMaxHP;
-	}
+	getTransform()->position.x = -1000;
+	getTransform()->position.y = -1000;
+	m_bIsActive = false;
+	m_row = -100;
+	m_col = -100;
 }
 
 //bool DestructibleObstacle::isActive()
@@ -73,5 +74,6 @@ void DestructibleObstacle::reset()
 
 void DestructibleObstacle::setActive()
 {
-	m_bIsActive;
+	m_bIsActive=true;
+	m_curHealth = STEANMAXHP;
 }

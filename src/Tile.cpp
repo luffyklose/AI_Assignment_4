@@ -1,12 +1,16 @@
 ﻿#include "Tile.h"
 
+
+#include "DestructibleObstacleManager.h"
 #include "TextureManager.h"
 
-Tile::Tile( float x,float y)
+Tile::Tile( float x,float y, int row, int col)
 {	
 	setWidth(40);
 	setHeight(40);
-	
+
+	m_row = row;
+	m_col = col;
 	getTransform()->position = glm::vec2(x,y);
 	getRigidBody()->isColliding = false;
 	m_node = nullptr;
@@ -19,7 +23,7 @@ Tile::~Tile()
 }
 
 
-Grass::Grass(float x, float y):Tile(x,y)
+Grass::Grass(float x, float y, int row, int col):Tile(x,y,row,col)
 {
 	TextureManager::Instance()->load("../Assets/textures/grass.png", "grass");
 
@@ -48,7 +52,7 @@ void Grass::clean()
 {
 }
 
-Brick::Brick(float x, float y) :Tile(x, y)
+Brick::Brick(float x, float y, int row, int col) :Tile(x, y,row,col)
 {
 	TextureManager::Instance()->load("../Assets/textures/brick.png", "brick");
 
@@ -77,29 +81,35 @@ void Brick::clean()
 {
 }
 
-BarrelTile::BarrelTile(float x, float y):Tile(x,y)
+SteanTile::SteanTile(float x, float y, int row, int col):Tile(x,y,row,col)
 {
 
-	m_pGrass=new Grass(x,y);
-	//m_pObstacle = new DestructibleObstacle(x, y,64,64);	
+	m_pGrass=new Grass(x,y,row,col);
+	//m_pStean = new DestructibleObstacle(x, y,64,64);
+	DestructibleObstacleManager::Instance()->generateObstacle();
+	m_pStean = DestructibleObstacleManager::Instance()->getDesObsList().back();
+	DestructibleObstacleManager::Instance()->AddStean(m_pStean);
+	m_pStean->getTransform()->position = glm::vec2(x, y);
+	m_pStean->setRow(row);
+	m_pStean->setCol(col);
 
-	m_obstacle = true;
+	m_obstacle = false;
 	m_hazard = false;
 	m_hasObstacle = true;
 }
 
-void BarrelTile::draw()
+void SteanTile::draw()
 {
 	m_pGrass->draw();
-	m_pObstacle->draw();
+	m_pStean->draw();
 }
 
-void BarrelTile::update()
+void SteanTile::update()
 {
 	m_pGrass->update();
-	m_pObstacle->update();
+	m_pStean->update();
 }
 
-void BarrelTile::clean()
+void SteanTile::clean()
 {
 }

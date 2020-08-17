@@ -5,6 +5,8 @@
 #include "HealthBarFiller.h"
 #include "Sprite.h"
 
+const int STEANMAXHP = 100;
+
 class DestructibleObstacle : public Sprite
 {
 public:
@@ -15,7 +17,7 @@ public:
 	virtual void draw() override;
 	virtual void update() override;
 	virtual void clean() override;
-	virtual int getMaxhealth() { return ObstacleMaxHP; }
+	virtual int getMaxhealth() { return STEANMAXHP; }
 	
 	void DecHP(int damage);
 
@@ -23,14 +25,18 @@ public:
 	
 	//bool isActive();
 	void setActive();
+	void setRow(int row) { m_row = row; }
+	void setCol(int col) { m_col = col; }
+	int getRow() { return m_row; }
+	int getCol() { return m_col; }
 	
 private:
-	const int ObstacleMaxHP = 50;
-	int m_curHP;
 	//bool m_bIsActive;
 	
 	HealthBarBorder* m_pBorder;
 	HealthBarFiller* m_pFiller;
+
+	int m_row, m_col;
 };
 
 

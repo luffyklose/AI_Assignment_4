@@ -20,7 +20,7 @@ public:
 	void draw();
 	void exit();
 	void RemoveInvalid();
-	
+	void addEnemy(Enemy* enemy);
 
 	//setter
 	void setTarget(Player* target = nullptr) { m_target = target; }

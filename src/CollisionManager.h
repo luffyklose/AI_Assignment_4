@@ -40,6 +40,7 @@ public:
 	static bool lineCircleCheck(glm::vec2 line_start, glm::vec2 line_end, glm::vec2 circle_centre, int circle_radius);
 
 	static bool PlayerCollision(Player* player, glm::vec2 velocity, std::vector<Tile*> obstacleVec);
+	static bool PlayerCollision(Player* player, glm::vec2 velocity, std::vector<DestructibleObstacle*> obstacleVec);
 	static void CheckMapCollision(Player* player, std::vector<Tile*> obstacleVec);
 	
 private:
