@@ -15,12 +15,12 @@ const float MAXSPEED = 2.0f;
 Warrior::Warrior(Player* player):Enemy(player)
 {
 	TextureManager::Instance()->loadSpriteSheet(
-		"../Assets/sprites/slime.txt",
-		"../Assets/sprites/slime.png",
-		"slime");
+		"../Assets/sprites/warrior.txt",
+		"../Assets/sprites/warrior.png",
+		"warrior");
 	
 	/*setSpriteSheet(TextureManager::Instance()->getSpriteSheet("plane"));*/
-	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("slime"));
+	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("warrior"));
 
 	// set frame width
 	setWidth(40);
@@ -63,22 +63,80 @@ void Warrior::draw()
 		"spritesheet", getAnimation("plane"),
 		x+10, y+10, getWidth(), getHeight(), 0.5f, m_angle, 255, true);*/
 
-	if (m_isPatrol)
-	{
-		TextureManager::Instance()->playAnimation(
-			"slime", getAnimation("run"),
-			x, y, getWidth(), getHeight(), 0.5f, 0, 255, true);
-	}
-	else
-	{
-		TextureManager::Instance()->playAnimation(
-			"slime", getAnimation("idle"),
-			x, y, getWidth(), getHeight(), 0.5f, 0, 255, true);
-	}
-
+		/*if (m_isPatrol)
+		{
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("walk_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+		}
+		else
+		{
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("idle"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+		}*/
 	
-	m_pBorder->draw();
-	m_pFiller->draw();
+		if (m_outerState == FLIGHT || m_innerState == MOVE_TO_MELEE || m_innerState == MOVE_TO_LOS || m_innerState == PATROL)
+		{
+			switch (m_dir)
+			{
+			case left:
+				TextureManager::Instance()->playAnimation(
+					"warrior", getAnimation("walk_left"),
+					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				std::cout << "walk left" << std::endl;
+				break;
+			case right:
+				TextureManager::Instance()->playAnimation(
+					"warrior", getAnimation("walk_right"),
+					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				std::cout << "walk right" << std::endl;
+				break;
+			case up:
+				TextureManager::Instance()->playAnimation(
+					"warrior", getAnimation("walk_up"),
+					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				std::cout << "walk up" << std::endl;
+				break;
+			case down:
+				TextureManager::Instance()->playAnimation(
+					"warrior", getAnimation("walk_down"),
+					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				std::cout << "walk down" << std::endl;
+				break;
+			default:break;
+			}
+		}
+		else if (m_innerState == MELEE_ATTACK)
+		{
+			switch (m_dir)
+			{
+			case left:
+				TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("hit_left"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				break;
+			case right:
+				TextureManager::Instance()->playAnimation(
+					"warrior", getAnimation("hit_right"),
+					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				break;
+			case up:
+				TextureManager::Instance()->playAnimation(
+					"warrior", getAnimation("hit_up"),
+					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				break;
+			case down:
+				TextureManager::Instance()->playAnimation(
+					"warrior", getAnimation("hit_down"),
+					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				break;
+			default:break;
+			}
+		}
+	
+		m_pBorder->draw();
+		m_pFiller->draw();
 }
 
 void Warrior::update()
@@ -141,7 +199,7 @@ void Warrior::setActive()
 
 void Warrior::m_buildAnimations()
 {
-	Animation idleAnimation = Animation();
+	/*Animation idleAnimation = Animation();
 
 	idleAnimation.name = "idle";
 	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-idle-0"));
@@ -163,7 +221,86 @@ void Warrior::m_buildAnimations()
 	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-6"));
 	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-7"));
 
-	setAnimation(runAnimation);
+	setAnimation(runAnimation);*/
+
+	Animation idleAnimation = Animation();
+	idleAnimation.name = "idle";
+	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_idle_0"));
+	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_idle_1"));
+	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_idle_2"));
+	setAnimation(idleAnimation);
+
+	Animation walk_rightAnimation = Animation();
+	walk_rightAnimation.name = "walk_right";
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_right_0"));
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_right_1"));
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_right_2"));
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_right_3"));
+	setAnimation(walk_rightAnimation);
+
+	Animation walk_upAnimation = Animation();
+	walk_upAnimation.name = "walk_up";
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_up_0"));
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_up_1"));
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_up_2"));
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_up_3"));
+	setAnimation(walk_upAnimation);
+
+	Animation walk_downAnimation = Animation();
+	walk_downAnimation.name = "walk_down";
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_down_0"));
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_down_1"));
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_down_2"));
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_walk_down_3"));
+	setAnimation(walk_downAnimation);
+
+	Animation hit_rightAnimation = Animation();
+	hit_rightAnimation.name = "hit_right";
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_right_0"));
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_right_1"));
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_right_2"));
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_right_3"));
+	setAnimation(hit_rightAnimation);
+
+	Animation hit_upAnimation = Animation();
+	hit_upAnimation.name = "hit_up";
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_up_0"));
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_up_1"));
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_up_2"));
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_up_3"));
+	setAnimation(hit_upAnimation);
+
+	Animation hit_downAnimation = Animation();
+	hit_downAnimation.name = "hit_down";
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_down_0"));
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_down_1"));
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_down_2"));
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_hit_down_3"));
+	setAnimation(hit_downAnimation);
+
+	Animation behit_rightAnimation = Animation();
+	behit_rightAnimation.name = "behit_right";
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_right_0"));
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_right_1"));
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_right_2"));
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_right_3"));
+	setAnimation(behit_rightAnimation);
+
+	Animation behit_upAnimation = Animation();
+	behit_upAnimation.name = "behit_up";
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_up_0"));
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_up_1"));
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_up_2"));
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_up_3"));
+	setAnimation(behit_upAnimation);
+
+	Animation behit_downAnimation = Animation();
+	behit_upAnimation.name = "behit_down";
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_down_0"));
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_down_1"));
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_down_2"));
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_down_3"));
+	setAnimation(behit_downAnimation);
 }
 
 void Warrior::MoveWarrior()

@@ -15,12 +15,12 @@ const float MAXSPEED = 2.0f;
 Archer::Archer(Player* player):Enemy(player)
 {
 	TextureManager::Instance()->loadSpriteSheet(
-		"../Assets/sprites/slime.txt",
-		"../Assets/sprites/slime.png",
-		"slime");
+		"../Assets/sprites/archer.txt",
+		"../Assets/sprites/archer.png",
+		"archer");
 
 	/*setSpriteSheet(TextureManager::Instance()->getSpriteSheet("plane"));*/
-	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("slime"));
+	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("archer"));
 
 	// set frame width
 	setWidth(40);
@@ -57,20 +57,89 @@ void Archer::draw()
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
 
-	if (m_isPatrol)
+	/*if (m_isPatrol)
 	{
 		TextureManager::Instance()->playAnimation(
-			"slime", getAnimation("run"),
-			x, y, getWidth(), getHeight(), 0.5f, 0, 255, true);
+			"archer", getAnimation("walk_right"),
+			x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
 	}
 	else
 	{
 		TextureManager::Instance()->playAnimation(
-			"slime", getAnimation("idle"),
-			x, y, getWidth(), getHeight(), 0.5f, 0, 255, true);
+			"archer", getAnimation("idle"),
+			x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+	}*/
+
+	if (m_outerState == FLIGHT || m_innerState == MOVE_TO_RANGED || m_innerState == MOVE_TO_LOS || m_innerState == PATROL || m_innerState == MOVE_TO_COVER)
+	{
+		switch (m_dir)
+		{
+		case left:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("walk_left"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		case right:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("walk_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		case up:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("walk_up"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		case down:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("walk_down"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		default:break;
+		}
 	}
-
-
+	else if (m_innerState == WAIT_IN_COVER)
+	{
+		if(m_dir == right || m_dir == up)
+		{
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("idle"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+		}
+		else if (m_dir == left || m_dir == down)
+		{
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("idle"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true, SDL_FLIP_HORIZONTAL);
+		}
+	}
+	else if (m_innerState == RANGED_ATTACK)
+	{
+		switch (m_dir)
+		{
+		case left:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("hit_left"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		case right:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("hit_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		case up:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("hit_up"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		case down:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("hit_down"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		default:break;
+		}
+	}
+	
 	m_pBorder->draw();
 	m_pFiller->draw();
 }
@@ -125,7 +194,7 @@ void Archer::setActive()
 
 void Archer::m_buildAnimations()
 {
-	Animation idleAnimation = Animation();
+	/*Animation idleAnimation = Animation();
 
 	idleAnimation.name = "idle";
 	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-idle-0"));
@@ -147,7 +216,86 @@ void Archer::m_buildAnimations()
 	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-6"));
 	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-7"));
 
-	setAnimation(runAnimation);
+	setAnimation(runAnimation);*/
+
+	Animation idleAnimation = Animation();
+	idleAnimation.name = "idle";
+	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_idle_0"));
+	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_idle_1"));
+	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_idle_2"));
+	setAnimation(idleAnimation);
+
+	Animation walk_rightAnimation = Animation();
+	walk_rightAnimation.name = "walk_right";
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_right_0"));
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_right_1"));
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_right_2"));
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_right_3"));
+	setAnimation(walk_rightAnimation);
+
+	Animation walk_upAnimation = Animation();
+	walk_upAnimation.name = "walk_up";
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_up_0"));
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_up_1"));
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_up_2"));
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_up_3"));
+	setAnimation(walk_upAnimation);
+
+	Animation walk_downAnimation = Animation();
+	walk_downAnimation.name = "walk_down";
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_down_0"));
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_down_1"));
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_down_2"));
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_walk_down_3"));
+	setAnimation(walk_downAnimation);
+
+	Animation hit_rightAnimation = Animation();
+	hit_rightAnimation.name = "hit_right";
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_right_0"));
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_right_1"));
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_right_2"));
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_right_3"));
+	setAnimation(hit_rightAnimation);
+
+	Animation hit_upAnimation = Animation();
+	hit_upAnimation.name = "hit_up";
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_up_0"));
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_up_1"));
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_up_2"));
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_up_3"));
+	setAnimation(hit_upAnimation);
+
+	Animation hit_downAnimation = Animation();
+	hit_downAnimation.name = "hit_down";
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_down_0"));
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_down_1"));
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_down_2"));
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_hit_down_3"));
+	setAnimation(hit_downAnimation);
+
+	Animation behit_rightAnimation = Animation();
+	behit_rightAnimation.name = "behit_right";
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_right_0"));
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_right_1"));
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_right_2"));
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_right_3"));
+	setAnimation(behit_rightAnimation);
+
+	Animation behit_upAnimation = Animation();
+	behit_upAnimation.name = "behit_up";
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_up_0"));
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_up_1"));
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_up_2"));
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_up_3"));
+	setAnimation(behit_upAnimation);
+
+	Animation behit_downAnimation = Animation();
+	behit_upAnimation.name = "behit_down";
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_down_0"));
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_down_1"));
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_down_2"));
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_down_3"));
+	setAnimation(behit_downAnimation);
 }
 
 void Archer::m_checkCurrentConditions()
