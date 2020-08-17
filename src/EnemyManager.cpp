@@ -40,7 +40,7 @@ void EnemyManager::generateArcher()
 	archer->AddKeyNode(NDMA::getPathNodeVec()[60]);
 
 	archer->getTransform()->position = archer->getKeyNode()[0]->m_keyNode->getTransform()->position;
-	archer->getRigidBody()->maxSpeed = 5.0f;
+	//archer->getRigidBody()->maxSpeed = 2.0f;
 	archer->setCurTargetKdyNode(archer->getKeyNode()[1]);	
 }
 
@@ -57,7 +57,7 @@ void EnemyManager::generateWarrior()
 	warrior->AddKeyNode(NDMA::getPathNodeVec()[180]);
 
 	warrior->getTransform()->position = warrior->getKeyNode()[0]->m_keyNode->getTransform()->position;
-	warrior->getRigidBody()->maxSpeed = 5.0f;
+	//warrior->getRigidBody()->maxSpeed = 2.0f;
 	warrior->setCurTargetKdyNode(warrior->getKeyNode()[1]);
 }
 

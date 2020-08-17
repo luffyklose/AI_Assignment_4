@@ -15,6 +15,7 @@ public:
 	
 	int getMaxhealth() override { return 0; }
 	int getSpeed() { return m_speed; }
+	int getDamage() { return m_damage; }
 
 	//bool IsActive() { return m_bIsActive; }
 	void setActive();

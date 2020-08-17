@@ -4,6 +4,8 @@ enum BehaviorState
 {
 	FLIGHT,
 	FIGHT,
+	HITRECOVER,
+	DEATH,
 	MELEE_ATTACK,
 	RANGED_ATTACK,
 	MOVE_TO_LOS,

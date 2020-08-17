@@ -9,6 +9,8 @@ const int SHOOTRANGE = 200;
 const int SHOOTDAMAGE = 20;
 const int SHOOTCD = 100;
 const int DETECTRANGE = 300;
+const int HITRECOVERTIME = 80;
+const float MAXSPEED = 2.0f;
 
 Archer::Archer(Player* player):Enemy(player)
 {
@@ -30,6 +32,7 @@ Archer::Archer(Player* player):Enemy(player)
 	//getTransform()->position = glm::vec2(x,y);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
+	getRigidBody()->maxSpeed = MAXSPEED;
 	getRigidBody()->isColliding = false;
 	setType(ARCHER);
 
@@ -39,6 +42,7 @@ Archer::Archer(Player* player):Enemy(player)
 	m_detectionRadius = DETECTRANGE;
 	m_accel = 0.2;
 	m_velMax = 2.0;
+	m_hitRecoverCounter = HITRECOVERTIME;
 
 	m_buildAnimations();
 	reset();
@@ -112,6 +116,11 @@ void Archer::setActive()
 
 	M_withinShootRange = false;
 	m_attackMode = false;
+
+	m_curHealth = ENEMYMAXHEALTH;
+	m_isHitRecover = false;
+	m_isFled = false;
+	m_hitRecoverCounter = HITRECOVERTIME;
 }
 
 void Archer::m_buildAnimations()
@@ -143,8 +152,17 @@ void Archer::m_buildAnimations()
 
 void Archer::m_checkCurrentConditions()
 {
-	if (m_curHealth >= 25)
+	if (m_hitRecoverCounter < HITRECOVERTIME)
 	{
+		m_outerState = HITRECOVER;
+	}
+	else if (m_curHealth <= 0)
+	{
+		m_outerState = DEATH;
+	}
+	else if (m_curHealth >= 25)
+	{
+		m_outerState = FIGHT;
 		if(m_curHealth<100)
 		{
 			if(m_hasLOS)
@@ -259,6 +277,15 @@ void Archer::m_stateMachineUpdate()
 			}
 		}
 			break;
+		case HITRECOVER:
+		{
+			m_hitRecoverCounter++;
+			break;
+		}
+		case DEATH:
+		{
+			break;
+		}
 		case FLIGHT:
 		{
 			// Flee Action
@@ -266,6 +293,7 @@ void Archer::m_stateMachineUpdate()
 			std::cout << "Fleeing..." << std::endl;
 			break;
 		}
+		break;
 	}
 	//std::cout << "Status: " << m_outerState << " " << m_innerState << std::endl;
 }

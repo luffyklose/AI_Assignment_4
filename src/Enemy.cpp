@@ -17,7 +17,10 @@ Enemy::Enemy(Player* player)
 	//m_isPatrol = false;
 	m_curHealth = ENEMYMAXHEALTH;
 	m_pTargetPlayer = player;
-	m_pFleeNode = nullptr;	
+	m_pFleeNode = nullptr;
+	m_isHitRecover = false;
+	m_isFled = false;
+	m_hitRecoverCounter = 0;
 }
 
 Enemy::~Enemy()
@@ -29,10 +32,10 @@ void Enemy::DecHP(int damage)
 	if (m_curHealth < 0)
 	{
 		m_curHealth = 0;
-		ExplosionManager::Instance()->generateExplosion();
-		auto explosion = ExplosionManager::Instance()->getExplosionList().back();
-		explosion->getTransform()->position = this->getTransform()->position;
-		reset();
+		//ExplosionManager::Instance()->generateExplosion();
+		//auto explosion = ExplosionManager::Instance()->getExplosionList().back();
+		//explosion->getTransform()->position = this->getTransform()->position;
+		//reset();
 	}
 }
 
@@ -219,6 +222,7 @@ void Enemy::Flee()
 	std::cout << "flee to " << m_pFleeNode->getTransform()->position.x << " " << m_pFleeNode->getTransform()->position.y << std::endl;
 	if (Util::distance(this->getTransform()->position, m_pFleeNode->getTransform()->position) < 6.0f)
 	{
+		m_isFled = true;
 		reset();
 		return;
 	}

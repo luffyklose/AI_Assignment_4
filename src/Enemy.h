@@ -29,6 +29,7 @@ public:
 	std::vector<PathNode*> getPatrolPath() { return m_pPatrolPath; }
 	bool getDetect() { return m_DetectPlayer; }
 	std::vector<PathConnection*> getPath();
+	bool getisFled() { return m_isFled; }
 	
 	
 	//setter
@@ -59,10 +60,14 @@ protected:
 			m_vel,
 			m_velMax;
 	int m_nodeIndex;	
-	int	m_detectionRadius;
+	int	m_detectionRadius,
+		m_hitRecoverCounter;
 	bool m_isPatrol,
 		m_hasLOS,
-		m_DetectPlayer;
+		m_DetectPlayer,
+		m_isHitRecover,
+		m_isAlive,
+		m_isFled;
 	
 	//PathNode* start_point, * end_point;
 	PathNode* m_targetNode,

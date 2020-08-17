@@ -9,6 +9,8 @@ const int MELEERANGE = 20;
 const int MELEEDAMAGE = 20;
 const int MELEECD = 100;
 const int DETECTRANGE = 200;
+const int HITRECOVERTIME = 50;
+const float MAXSPEED = 2.0f;
 
 Warrior::Warrior(Player* player):Enemy(player)
 {
@@ -31,6 +33,7 @@ Warrior::Warrior(Player* player):Enemy(player)
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
+	getRigidBody()->maxSpeed = MAXSPEED;
 	setType(WARRIOR);
 
 	this->m_pFiller = new HealthBarFiller(this);
@@ -39,7 +42,8 @@ Warrior::Warrior(Player* player):Enemy(player)
 	m_detectionRadius = DETECTRANGE;
 	m_accel = 0.2;
 	m_velMax = 2.0;
-
+	m_hitRecoverCounter = HITRECOVERTIME;
+	
 	m_buildAnimations();
 
 	reset();
@@ -89,7 +93,7 @@ void Warrior::update()
 	m_checkCurrentConditions();
 	//std::cout << m_outerState << " " << m_innerState << std::endl;
 	m_stateMachineUpdate();
-
+		
 	m_meleeCounter++;
 
 	//if(m_isPatrol)
@@ -112,6 +116,27 @@ void Warrior::update()
 
 void Warrior::clean()
 {
+}
+
+void Warrior::reset()
+{
+	getTransform()->position.x = -1000;
+	getTransform()->position.y = -1000;
+	m_bIsActive = false;
+}
+
+void Warrior::setActive()
+{
+	m_bIsActive = true;
+	m_outerState = FIGHT;
+	m_innerState = PATROL;
+
+	m_withinMeleeRange = false;
+	m_attackMode = false;
+	m_curHealth = ENEMYMAXHEALTH;
+	m_isHitRecover = false;
+	m_isFled = false;
+	m_hitRecoverCounter = HITRECOVERTIME;
 }
 
 void Warrior::m_buildAnimations()
@@ -185,8 +210,17 @@ void Warrior::MoveWarrior()
 
 void Warrior::m_checkCurrentConditions()
 {
-	if (m_curHealth >= 25)
+	if((m_hitRecoverCounter < HITRECOVERTIME))
 	{
+		m_outerState = HITRECOVER;
+	}
+	else if(m_curHealth<=0)
+	{
+		m_outerState = DEATH;
+	}
+	else if (m_curHealth >= 25)
+	{
+		m_outerState = FIGHT;
 		if (m_attackMode)
 		{
 			if (!m_hasLOS)
@@ -249,37 +283,46 @@ void Warrior::m_stateMachineUpdate()
 	case FIGHT:
 		switch (m_innerState)
 		{
-		case PATROL:
-		{
-			// Patrol Action
-			PatrolMove();
-			//std::cout << "Patroling..." << std::endl;
-			break;
-		}
-		case MELEE_ATTACK:
-		{
-			// Perform Melee Attack Action
-			Melee();
-			std::cout << "Meleeing..." << std::endl;
-			break;
-		}
-		case MOVE_TO_LOS:
-		{
-			// Move 2 LOS Action
-			Move2LOS();
-			//std::cout << "Moving to LOS..." << std::endl;
-			break;
-		}
-		case MOVE_TO_MELEE:
-		{
-			// Move 2 Melee Range Action
-			setAttackNode();
-			Move2NearestAttackNode();
-			//std::cout << "Moving to Attack..." << std::endl;
-			break;
-		}
+			case PATROL:
+			{
+				// Patrol Action
+				PatrolMove();
+				//std::cout << "Patroling..." << std::endl;
+				break;
+			}
+			case MELEE_ATTACK:
+			{
+				// Perform Melee Attack Action
+				Melee();
+				std::cout << "Meleeing..." << std::endl;
+				break;
+			}
+			case MOVE_TO_LOS:
+			{
+				// Move 2 LOS Action
+				Move2LOS();
+				//std::cout << "Moving to LOS..." << std::endl;
+				break;
+			}
+			case MOVE_TO_MELEE:
+			{
+				// Move 2 Melee Range Action
+				setAttackNode();
+				Move2NearestAttackNode();
+				//std::cout << "Moving to Attack..." << std::endl;
+				break;
+			}
 		}
 		break;
+	case HITRECOVER:
+	{
+		m_hitRecoverCounter++;
+		break;
+	}
+	case DEATH:
+	{
+		break;
+	}
 	case FLIGHT:
 	{
 		// Flee Action
@@ -461,22 +504,3 @@ void Warrior::Melee()
 	default: break;
 	}
 }
-
-
-void Warrior::reset()
-{
-	getTransform()->position.x = -1000;
-	getTransform()->position.y = -1000;
-	m_bIsActive = false;
-}
-
-void Warrior::setActive()
-{	
-	m_bIsActive = true;
-	m_outerState = FIGHT;
-	m_innerState = PATROL;
-
-	m_withinMeleeRange = false;
-	m_attackMode = false;
-}
-

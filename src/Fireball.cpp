@@ -1,10 +1,11 @@
 ﻿#include "Fireball.h"
-
-
 #include "ExplosionManager.h"
 #include "TextureManager.h"
 
-FireBall::FireBall() :m_face(1),m_damage(50),m_speed(10)
+const float FLYSPEED = 4.0f;
+const int FIREBALLDAMAGE = 20;
+
+FireBall::FireBall() :m_face(1),m_damage(FIREBALLDAMAGE),m_speed(FLYSPEED)
 {
 	TextureManager::Instance()->loadSpriteSheet(
 		"../Assets/sprites/fireball.txt",
@@ -23,7 +24,7 @@ FireBall::FireBall() :m_face(1),m_damage(50),m_speed(10)
 	//getTransform()->position = glm::vec2(x, y);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-	//getRigidBody()->maxSpeed = 10.0f;
+	//getRigidBody()->maxSpeed = FLYSPEED;
 	getRigidBody()->isColliding = false;
 
 	m_buildAnimations();
@@ -86,8 +87,8 @@ void FireBall::update()
 	
 	//this->getTransform()->position.x += m_speed * m_face;
 	this->getTransform()->position += this->getRigidBody()->velocity;
-	if (this->getTransform()->position.x < 0 || this->getTransform()->position.x > 1024 
-		|| this->getTransform()->position.y < 0 || this->getTransform()->position.y > 768)
+	if (this->getTransform()->position.x < 0 || this->getTransform()->position.x > Config::SCREEN_WIDTH 
+		|| this->getTransform()->position.y < 0 || this->getTransform()->position.y > Config::SCREEN_HEIGHT)
 		reset();
 }
 

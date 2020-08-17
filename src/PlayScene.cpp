@@ -118,7 +118,7 @@ void PlayScene::update()
 	{
 		if (CollisionManager::AABBCheck(fireball, m_pPlayer))
 		{
-			m_pPlayer->DecHP(20);
+			m_pPlayer->DecHP(fireball->getDamage());
 			fireball->setIsActive(false);
 		}
 
@@ -134,7 +134,14 @@ void PlayScene::update()
 		{
 			if (CollisionManager::AABBCheck(fireball, stean))
 			{
-				stean->DecHP(20);
+				int row = stean->getRow();
+				int col = stean->getCol();
+				stean->DecHP(m_pPlayer->getRangeDamage());
+				if (!stean->isActive())
+				{
+					AddPathNode(m_level[row][col]);
+					AddSingleNodeConnection(row, col);
+				}
 				fireball->setIsActive(false);
 			}
 		}
@@ -160,12 +167,23 @@ void PlayScene::update()
 				break;				
 			}
 		}
-
-		/*if(m_pEnemy->getCurHealth()<=0)
+		if(m_pEnemy->getisFled())
 		{
-			delete m_pEnemy;
-			m_pEnemy = nullptr;
-		}*/
+			switch(m_pEnemy->getType())
+			{
+			case WARRIOR:
+				{
+				EnemyManager::Instance()->generateWarrior();
+				break;
+				}
+			case ARCHER:
+				{
+				EnemyManager::Instance()->generateArcher();
+				break;
+				}
+				default:break;
+			}
+		}
 	}
 
 	
@@ -719,7 +737,7 @@ void PlayScene::start()
 		addChild(archer);
 	}
 	
-	//EnemyManager::Instance()->generateWarrior();
+	EnemyManager::Instance()->generateWarrior();
 	
 	EnemyManager::Instance()->generateArcher();
 
