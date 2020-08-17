@@ -62,18 +62,63 @@ void PlayScene::update()
 	m_pEnemyKilledLabel->setText(std::to_string(m_enemyKilled));*/
 	
 	//std::cout << "DestructibleObstacle Number: " << m_obstacleVec.size() << std::endl;
-	/*for (auto fireball : m_pFireballVec)
+
+	//std::cout << "Player fireball: " << ProjectileManager::Instance()->getPlayerFireVec().size() << std::endl;
+	//std::cout << "Enemy fireball: " << ProjectileManager::Instance()->getEnemyFireVec().size() << std::endl;
+	for (auto fireball : ProjectileManager::Instance()->getPlayerFireVec())
 	{
-		for (auto enemy : m_enemyVec)
+		for (auto enemy : EnemyManager::Instance()->getEnemyVec())
 		{
 			if (CollisionManager::AABBCheck(fireball, enemy))
 			{
-				enemy->DecHP(m_pPlayer->getDamage());
-				delete fireball;
-				fireball = nullptr;
+				std::cout << "Player hit enemy" << std::endl;
+				enemy->DecHP(m_pPlayer->getRangeDamage());
+				fireball->setIsActive(false);
 			}
 		}
-	}*/
+
+		for (auto obstacle : m_obstacleVec)
+		{
+			if (CollisionManager::AABBCheck(fireball, obstacle))
+			{
+				fireball->setIsActive(false);
+			}
+		}
+
+		if (fireball->getTransform()->position.x<-0.5f * fireball->getWidth() ||
+			fireball->getTransform()->position.x > Config::SCREEN_WIDTH + 0.5f * fireball->getWidth() ||
+			fireball->getTransform()->position.y < -0.5f * fireball->getHeight() ||
+			fireball->getTransform()->position.y > Config::SCREEN_HEIGHT + 0.5f * fireball->getHeight())
+		{
+			fireball->setIsActive(false);
+		}
+	}
+
+	for (auto fireball : ProjectileManager::Instance()->getEnemyFireVec())
+	{
+		if (CollisionManager::AABBCheck(fireball, m_pPlayer))
+		{
+			m_pPlayer->DecHP(20);
+			fireball->setIsActive(false);
+		}
+
+		for (auto obstacle : m_obstacleVec)
+		{
+			if (CollisionManager::AABBCheck(fireball, obstacle))
+			{
+				fireball->setIsActive(false);
+			}
+		}
+
+		if (fireball->getTransform()->position.x < -0.5f * fireball->getWidth() ||
+			fireball->getTransform()->position.x > Config::SCREEN_WIDTH + 0.5f * fireball->getWidth() ||
+			fireball->getTransform()->position.y < -0.5f * fireball->getHeight() ||
+			fireball->getTransform()->position.y > Config::SCREEN_HEIGHT + 0.5f * fireball->getHeight())
+		{
+			fireball->setIsActive(false);
+		}
+	}
+
 	
 	for(auto m_pEnemy : EnemyManager::Instance()->getEnemyVec())
 	{
@@ -102,12 +147,20 @@ void PlayScene::update()
 	//CollisionManager::CheckMapCollision(m_pPlayer, m_obstacleVec);
 	//std::cout << "HP: " << m_enemyVec[0]->getCurHealth() << std::endl;
 	
-	RemoveNullObject();
+	//RemoveNullObject();
+	EnemyManager::Instance()->RemoveInvalid();
+	ProjectileManager::Instance()->RemoveInvalid();	
 }
 
 void PlayScene::clean()
 {
-	removeAllChildren();
+	if (!m_obstacleVec.empty())
+	{
+		m_obstacleVec.erase(remove(m_obstacleVec.begin(), m_obstacleVec.end(), nullptr), m_obstacleVec.end());
+	}
+	EnemyManager::Instance()->exit();
+	ProjectileManager::Instance()->exit();
+	removeNullPointer();
 }
 
 void PlayScene::handleEvents()
@@ -222,28 +275,35 @@ void PlayScene::handleEvents()
 
 			ProjectileManager::Instance()->generateFireball();
 			FireBall* fireball = ProjectileManager::Instance()->getFireBallList().back();
+			//ProjectileManager::Instance()->getPlayerFireVec().push_back(fireball);
+			ProjectileManager::Instance()->addFireBall2PlayerVec(fireball);
+			std::cout << "Player fireball: " << ProjectileManager::Instance()->getPlayerFireVec().size() << std::endl;
 			
 			switch (m_pPlayer->getDirection())
 			{
 			case 1:
 				fireball->setDirection(Sprite::left);
-				fireball->getTransform()->position.x = m_pPlayer->getTransform()->position.x;
-				fireball->getTransform()->position.y = m_pPlayer->getTransform()->position.y + (float)m_pPlayer->getHeight() / 2;
+				fireball->getRigidBody()->velocity = glm::vec2(-fireball->getSpeed(),0);				
+				fireball->getTransform()->position.x = m_pPlayer->getTransform()->position.x - 0.5f * m_pPlayer->getWidth() - 0.5f * fireball->getWidth();
+				fireball->getTransform()->position.y = m_pPlayer->getTransform()->position.y;
 				break;
 			case 2:
 				fireball->setDirection(Sprite::right);
-				fireball->getTransform()->position.x = m_pPlayer->getTransform()->position.x + (float)m_pPlayer->getWidth();
-				fireball->getTransform()->position.y = m_pPlayer->getTransform()->position.y + (float)m_pPlayer->getHeight() / 2;
+				fireball->getRigidBody()->velocity = glm::vec2(fireball->getSpeed(), 0);
+				fireball->getTransform()->position.x = m_pPlayer->getTransform()->position.x + 0.5f * m_pPlayer->getWidth() + 0.5f * fireball->getWidth();
+				fireball->getTransform()->position.y = m_pPlayer->getTransform()->position.y;
 				break;
 			case 3:
 				fireball->setDirection(Sprite::up);
-				fireball->getTransform()->position.x = m_pPlayer->getTransform()->position.x + (float)m_pPlayer->getWidth() / 2;
-				fireball->getTransform()->position.y = m_pPlayer->getTransform()->position.y;
+				fireball->getRigidBody()->velocity = glm::vec2(0, -fireball->getSpeed());
+				fireball->getTransform()->position.x = m_pPlayer->getTransform()->position.x;
+				fireball->getTransform()->position.y = m_pPlayer->getTransform()->position.y - 0.5f * m_pPlayer->getHeight() - 0.5f * fireball->getHeight();
 				break;
 			case 4:
 				fireball->setDirection(Sprite::down);
-				fireball->getTransform()->position.x = m_pPlayer->getTransform()->position.x + (float)m_pPlayer->getWidth() / 2;
-				fireball->getTransform()->position.y = m_pPlayer->getTransform()->position.y + (float)m_pPlayer->getHeight();
+				fireball->getRigidBody()->velocity = glm::vec2(0, fireball->getSpeed());
+				fireball->getTransform()->position.x = m_pPlayer->getTransform()->position.x;
+				fireball->getTransform()->position.y = m_pPlayer->getTransform()->position.y + 0.5f * m_pPlayer->getHeight() + 0.5f * fireball->getHeight();
 				break;
 			default:
 				break;
@@ -315,7 +375,7 @@ void PlayScene::handleEvents()
 		m_pHPressed = false;
 	}
 
-	if (!m_pPPressed)
+	/*if (!m_pPPressed)
 	{
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_P))
 		{
@@ -330,14 +390,14 @@ void PlayScene::handleEvents()
 	if (EventManager::Instance().isKeyUp(SDL_SCANCODE_P))
 	{
 		m_pPPressed = false;		
-	}
+	}*/
 
 	if (!m_pKPressed)
 	{
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_K))
 		{
 			m_pKPressed = true;
-			for (auto m_pEnemy : m_enemyVec)
+			for (auto m_pEnemy : EnemyManager::Instance()->getEnemyVec())
 			{
 				m_pEnemy->DecHP(m_pPlayer->getMeleeDamage());
 			}
@@ -531,24 +591,6 @@ void PlayScene::drawLOS()
 	}
 }
 
-void PlayScene::RemoveNullObject()
-{
-	/*if (!m_pFireballVec.empty())
-	{
-		m_pFireballVec.erase(remove(m_pFireballVec.begin(), m_pFireballVec.end(), nullptr), m_pFireballVec.end());
-	}*/
-	if (!m_enemyVec.empty())
-	{
-		m_enemyVec.erase(remove(m_enemyVec.begin(), m_enemyVec.end(), nullptr), m_enemyVec.end());
-	}
-	if (!m_obstacleVec.empty())
-	{
-		m_obstacleVec.erase(remove(m_obstacleVec.begin(), m_obstacleVec.end(), nullptr), m_obstacleVec.end());
-	}
-	removeNullPointer();
-}
-
-
 void PlayScene::start()
 {
 	m_isDebugMode = false;
@@ -560,6 +602,7 @@ void PlayScene::start()
 	//buildGrid();
 	LoadMap();
 	AddConnection();
+	NDMA::AddFleeNode(NDMA::getPathNodeVec()[0]);
 
 	// Set Enemy
 	m_pPlayer = new Player(100.0f, 500.0f);

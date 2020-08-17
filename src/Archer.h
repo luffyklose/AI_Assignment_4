@@ -30,6 +30,7 @@ private:
 	void Move2NearestAttackNode();
 	void Shoot();
 	void setFaceDir();
+	void Move2Cover();
 
 public:
 	

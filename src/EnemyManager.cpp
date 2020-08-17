@@ -100,6 +100,45 @@ void EnemyManager::draw()
 	}
 }
 
+void EnemyManager::exit()
+{
+	for(auto enemy:m_pArcherPool)
+	{
+		delete enemy;
+		enemy = nullptr;
+	}
+	for (auto enemy : m_pWarriorPool)
+	{
+		delete enemy;
+		enemy = nullptr;
+	}
+	for (auto enemy : m_pEnemyVec)
+	{
+		delete enemy;
+		enemy = nullptr;
+	}
+
+	m_pArcherPool.clear();
+	m_pWarriorPool.clear();
+	m_pEnemyVec.clear();
+	m_pEnemyVec.shrink_to_fit();
+}
+
+void EnemyManager::RemoveInvalid()
+{
+	for (auto enemy = m_pEnemyVec.begin(); enemy != m_pEnemyVec.end();)
+	{
+		if (!(*enemy)->isActive())
+		{
+			enemy = m_pEnemyVec.erase(enemy);
+		}
+		else
+		{
+			++enemy;
+		}
+	}
+}
+
 void EnemyManager::m_buildWarriorPool()
 {
 	m_pWarriorPool = std::list<Warrior*>();

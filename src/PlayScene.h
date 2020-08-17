@@ -39,7 +39,6 @@ private:
 	void LoadMap();
 	void AddConnection();
 	PathNode* getPathNode(int x, int y);
-	void RemoveNullObject();
 public:
 	
 private:	
@@ -65,7 +64,7 @@ private:
 
 	//DestructibleObstacle* m_pObstacle;
 
-	std::vector<Enemy*> m_enemyVec;
+	//std::vector<Enemy*> m_enemyVec;
 	//std::vector<DestructibleObstacle*> m_obstacleVec;
 	std::vector<glm::vec2> m_pointVec;
 	std::vector<glm::vec4> m_colorVec;

@@ -40,11 +40,7 @@ Archer::Archer(Player* player):Enemy(player)
 	m_accel = 0.2;
 	m_velMax = 2.0;
 
-	m_outerState = FIGHT;
-	m_innerState = PATROL;
 
-	M_withinShootRange = false;
-	m_attackMode = false;
 
 	m_buildAnimations();
 
@@ -89,11 +85,11 @@ void Archer::update()
 	m_shootCounter++;
 	detectPlayer(m_pTargetPlayer);
 
-	std::cout <<"Before Update:"<< m_attackMode << " " << m_DetectPlayer << " " << m_hasLOS << std::endl;
+	//std::cout <<"Before Update:"<< m_attackMode << " " << m_DetectPlayer << " " << m_hasLOS << std::endl;
 	m_checkCurrentConditions();
 	//std::cout << m_outerState << " " << m_innerState << std::endl;
 	m_stateMachineUpdate();
-	std::cout << "After Update:" << m_attackMode << " " << m_DetectPlayer << " " << m_hasLOS << std::endl;
+	//std::cout << "After Update:" << m_attackMode << " " << m_DetectPlayer << " " << m_hasLOS << std::endl;
 
 
 	m_pFiller->update();
@@ -106,17 +102,19 @@ void Archer::clean()
 
 void Archer::reset()
 {
-	if (m_bIsActive == true)
-	{
-		getTransform()->position.x = -1000;
-		getTransform()->position.y = -1000;
-		m_bIsActive = false;
-	}
+	getTransform()->position.x = -1000;
+	getTransform()->position.y = -1000;
+	m_bIsActive = false;
 }
 
 void Archer::setActive()
 {
 	m_bIsActive = true;
+	m_outerState = FIGHT;
+	m_innerState = PATROL;
+
+	M_withinShootRange = false;
+	m_attackMode = false;
 }
 
 void Archer::m_buildAnimations()
@@ -229,14 +227,14 @@ void Archer::m_stateMachineUpdate()
 			{
 				// Patrol Action
 				PatrolMove();
-				std::cout << "Patroling..." << std::endl;
+				//std::cout << "Patroling..." << std::endl;
 				break;
 			}
 			case RANGED_ATTACK:
 			{
 				// Perform Range Attack Action
 				Shoot();
-				std::cout << "Shooting..." << std::endl;
+				//std::cout << "Shooting..." << std::endl;
 				break;
 			}
 			case MOVE_TO_LOS:
@@ -250,11 +248,12 @@ void Archer::m_stateMachineUpdate()
 			{
 				// Move 2 Range Range Action
 				Move2NearestAttackNode();
-				std::cout << "Moving to Attack..." << std::endl;
+				//std::cout << "Moving to Attack..." << std::endl;
 				break;
 			}
 			case MOVE_TO_COVER:
 			{
+				Move2Cover();
 				break;
 			}
 			case WAIT_IN_COVER:
@@ -323,7 +322,7 @@ void Archer::Move2NearestAttackNode()
 	{
 		SetNextNode();
 	}
-	std::cout << "In Range? After: " << M_withinShootRange << std::endl;
+	//std::cout << "In Range? After: " << M_withinShootRange << std::endl;
 }
 
 void Archer::Shoot()
@@ -333,33 +332,39 @@ void Archer::Shoot()
 	m_shootCounter = 0;
 	ProjectileManager::Instance()->generateFireball();
 	auto fireball = ProjectileManager::Instance()->getFireBallList().back();
+	ProjectileManager::Instance()->getEnemyFireVec().push_back(fireball);
+	auto FireBallVelVector = Util::normalize(m_pTargetPlayer->getTransform()->position - this->getTransform()->position);
+	FireBallVelVector.x *= fireball->getSpeed();
+	FireBallVelVector.y *= fireball->getSpeed();
+	fireball->getRigidBody()->velocity = FireBallVelVector;
+	
 	setFaceDir();
-
 	switch (m_dir)
 	{
 	case left:
 		fireball->setDirection(Sprite::left);
-		fireball->getTransform()->position.x = this->getTransform()->position.x;
-		fireball->getTransform()->position.y = this->getTransform()->position.y + (float)this->getHeight() / 2;
+		fireball->getTransform()->position.x = this->getTransform()->position.x - 0.5f * this->getWidth() - 0.5f * fireball->getWidth();
+		fireball->getTransform()->position.y = this->getTransform()->position.y ;
 		break;
 	case right:
 		fireball->setDirection(Sprite::right);
-		fireball->getTransform()->position.x = this->getTransform()->position.x + (float)this->getWidth();
-		fireball->getTransform()->position.y = this->getTransform()->position.y + (float)this->getHeight() / 2;
+		fireball->getTransform()->position.x = this->getTransform()->position.x + 0.5f * this->getWidth() + 0.5f * fireball->getWidth();
+		fireball->getTransform()->position.y = this->getTransform()->position.y ;
 		break;
 	case up:
 		fireball->setDirection(Sprite::up);
-		fireball->getTransform()->position.x = this->getTransform()->position.x + (float)this->getWidth() / 2;
-		fireball->getTransform()->position.y = this->getTransform()->position.y;
+		fireball->getTransform()->position.x = this->getTransform()->position.x;
+		fireball->getTransform()->position.y = this->getTransform()->position.y - 0.5f * this->getHeight() - 0.5f * fireball->getHeight();
 		break;
 	case down:
 		fireball->setDirection(Sprite::down);
-		fireball->getTransform()->position.x = this->getTransform()->position.x + (float)this->getWidth() / 2;
-		fireball->getTransform()->position.y = this->getTransform()->position.y + (float)this->getHeight();
+		fireball->getTransform()->position.x = this->getTransform()->position.x ;
+		fireball->getTransform()->position.y = this->getTransform()->position.y + 0.5f * this->getHeight() + 0.5f * fireball->getHeight();
 		break;
 	default:
 		break;
-	}	
+	}
+	std::cout << "archer shoots fireball" << std::endl;
 }
 
 void Archer::setFaceDir()
@@ -384,57 +389,44 @@ void Archer::setFaceDir()
 	std::cout << "angle: " << Angle << " Dir: " << m_dir << std::endl;
 }
 
-//void Archer::MovePlane()
-//{
-//	switch (m_dir)
-//	{
-//	case left:
-//	{
-//		getRigidBody()->velocity.x += m_accel;
-//		getRigidBody()->velocity.x = std::min(getRigidBody()->velocity.x, m_velMax);
-//		getRigidBody()->velocity = glm::vec2(-m_vel, 0.0f);
-//		break;
-//	}
-//	case right:
-//	{
-//		getRigidBody()->velocity.x += m_accel;
-//		getRigidBody()->velocity.x = std::min(getRigidBody()->velocity.x, m_velMax);
-//		getRigidBody()->velocity = glm::vec2(m_vel, 0.0f);
-//		break;
-//	}
-//	case up:
-//	{
-//		getRigidBody()->velocity.y += m_accel;
-//		getRigidBody()->velocity.y = std::min(getRigidBody()->velocity.y, m_velMax);
-//		getRigidBody()->velocity = glm::vec2(0.0f, -m_vel);
-//		break;
-//	}
-//	case down:
-//	{
-//		getRigidBody()->velocity.y += m_accel;
-//		getRigidBody()->velocity.y = std::min(getRigidBody()->velocity.y, m_velMax);
-//		getRigidBody()->velocity = glm::vec2(0.0f, m_vel);
-//		break;
-//	}
-//	default:break;
-//	}
-//}
-
-//void Archer::SetNextNode()
-//{
-//	//std::cout << "Set Node" << m_nodeIndex<<" "<<(int)s_path.size()<<std::endl;
-//	if (m_nodeIndex < (int)m_path.size() - 1)
-//	{
-//		//std::cout << "Before: Move from (" << m_currentNode->x/32 << "," << m_currentNode->y/32 << ") to (" << m_targetNode->x/32 << "," << m_targetNode->y/32 << ")." << std::endl;
-//		m_currentNode = m_targetNode;
-//		m_targetNode = m_path[++m_nodeIndex]->GetToNode();
-//		//std::cout << "After: Move from (" << m_currentNode->x/32 << "," << m_currentNode->y/32<< ") to (" << m_targetNode->x/32 << "," << m_targetNode->y/32 << ")." << std::endl;
-//	}
-//	else
-//	{
-//		std::cout << "the last one" << std::endl;
-//		m_currentNode = m_targetNode;
-//	}
-//}
-
+void Archer::Move2Cover()
+{
+	setCurNode();
+	if (m_currentNode->getLOS())
+		return;
+	float NodeDis = 0.0f;
+	PathNode* TargetPathNode = nullptr;
+	for (auto pathnode : NDMA::getPathNodeVec())
+	{
+		if (!pathnode->getLOS())
+			continue;
+		float tempDistance = Util::distance(this->getTransform()->position, pathnode->getTransform()->position);
+		if (NodeDis == 0.0f || tempDistance < NodeDis)
+		{
+			NodeDis = tempDistance;
+			TargetPathNode = pathnode;
+		}
+	}
+	//std::cout << "distance:" << NodeDis << std::endl;
+	if (Util::distance(this->getTransform()->position, TargetPathNode->getTransform()->position) < 6.0f)
+	{
+		return;
+	}
+	if (m_pTargetPathNode != TargetPathNode)
+	{
+		m_pTargetPathNode = TargetPathNode;
+		if (m_currentNode == m_pTargetPathNode)
+			return;
+		PathManager::GetShortestPath(m_currentNode, m_pTargetPathNode);
+		m_path = PathManager::getPath();
+		m_currentNode = m_path.front()->GetFromNode();
+		m_targetNode = m_path.front()->GetToNode();
+		m_nodeIndex = 0;
+	}
+	MoveEnemy();
+	if (abs(Util::distance(this->getTransform()->position, m_targetNode->getTransform()->position)) < 6.0f)
+	{
+		SetNextNode();
+	}
+}
 

@@ -18,6 +18,8 @@ public:
 	void Init();
 	void update();
 	void draw();
+	void exit();
+	void RemoveInvalid();
 	
 
 	//setter

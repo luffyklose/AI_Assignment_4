@@ -19,6 +19,7 @@ public:
 	Scene* getParent() const;
 	void setParent(Scene* parent);
 	bool isActive() { return m_bIsActive; }
+	void setIsActive(bool active) { m_bIsActive = active; }
 
 protected:
 	Scene* m_pParentScene{};

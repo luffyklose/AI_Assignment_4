@@ -14,6 +14,7 @@ public:
 	void reset();
 	
 	int getMaxhealth() override { return 0; }
+	int getSpeed() { return m_speed; }
 
 	//bool IsActive() { return m_bIsActive; }
 	void setActive();

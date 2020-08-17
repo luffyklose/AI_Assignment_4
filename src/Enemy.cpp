@@ -212,12 +212,11 @@ void Enemy::Flee()
 			}
 		}
 	}
-
+	std::cout << "flee to " << m_pFleeNode->getTransform()->position.x << " " << m_pFleeNode->getTransform()->position.y << std::endl;
 	if (Util::distance(this->getTransform()->position, m_pFleeNode->getTransform()->position) < 6.0f)
 	{
 		return;
 	}
-
 	if (m_pTargetPathNode != m_pFleeNode)
 	{
 		m_pTargetPathNode = m_pFleeNode;

@@ -24,8 +24,6 @@ FireBall::FireBall() :m_face(1),m_damage(50),m_speed(10)
 	//getRigidBody()->maxSpeed = 10.0f;
 	getRigidBody()->isColliding = false;
 
-	//setType(FIREBALL);
-
 	m_buildAnimations();
 
 	reset();
@@ -68,7 +66,7 @@ void FireBall::draw()
 
 void FireBall::update()
 {
-	switch (m_dir)
+	/*switch (m_dir)
 	{
 	case right:
 		this->getTransform()->position.x += (float)m_speed * 1;
@@ -82,9 +80,10 @@ void FireBall::update()
 	case down:
 		this->getTransform()->position.y += (float)m_speed * 1;
 		break;
-	}
+	}*/
 	
-	this->getTransform()->position.x += m_speed * m_face;
+	//this->getTransform()->position.x += m_speed * m_face;
+	this->getTransform()->position += this->getRigidBody()->velocity;
 	if (this->getTransform()->position.x < 0 || this->getTransform()->position.x > 1024 
 		|| this->getTransform()->position.y < 0 || this->getTransform()->position.y > 768)
 		reset();

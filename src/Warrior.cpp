@@ -40,12 +40,6 @@ Warrior::Warrior(Player* player):Enemy(player)
 	m_accel = 0.2;
 	m_velMax = 2.0;
 
-	m_outerState = FIGHT;
-	m_innerState = PATROL;
-
-	m_withinMeleeRange = false;
-	m_attackMode = false;
-
 	m_buildAnimations();
 
 	reset();
@@ -187,22 +181,7 @@ void Warrior::MoveWarrior()
 	//std::cout << "after " << m_dX<<" "<<m_dY << std::endl;
 }
 
-//void Warrior::SetNextNode()
-//{
-//	//std::cout << "Set Node" << m_nodeIndex<<" "<<(int)s_path.size()<<std::endl;
-//	if (m_nodeIndex < (int)m_path.size() - 1)
-//	{
-//		//std::cout << "Before: Move from (" << m_currentNode->x/32 << "," << m_currentNode->y/32 << ") to (" << m_targetNode->x/32 << "," << m_targetNode->y/32 << ")." << std::endl;
-//		m_currentNode = m_targetNode;
-//		m_targetNode = m_path[++m_nodeIndex]->GetToNode();
-//		//std::cout << "After: Move from (" << m_currentNode->x/32 << "," << m_currentNode->y/32<< ") to (" << m_targetNode->x/32 << "," << m_targetNode->y/32 << ")." << std::endl;
-//	}
-//	else
-//	{
-//		std::cout << "the last one" << std::endl;
-//		m_currentNode = m_targetNode;
-//	}
-//}
+
 
 void Warrior::m_checkCurrentConditions()
 {
@@ -483,54 +462,21 @@ void Warrior::Melee()
 	}
 }
 
-/*void Warrior::setPath(std::vector<PathConnection*> path)
-{
-	m_path = path;
-	m_currentNode = m_path[0]->GetFromNode();
-	m_targetNode = m_path[0]->GetToNode();
-}*/
-
-//std::vector<PathConnection*> Warrior::getPath()
-//{
-//	return m_path;
-//}
-
-
-//void Warrior::getDir()
-//{
-//	if (m_targetNode->getTransform()->position.x == m_currentNode->getTransform()->position.x && m_targetNode->getTransform()->position.y > m_currentNode-> getTransform()->position.y)
-//		m_dir = down;
-//	if (m_targetNode->getTransform()->position.x == m_currentNode->getTransform()->position.x && m_targetNode->getTransform()->position.y < m_currentNode->getTransform()->position.y)
-//		m_dir = up;
-//	if (m_targetNode->getTransform()->position.x < m_currentNode->getTransform()->position.x && m_targetNode->getTransform()->position.y == m_currentNode->getTransform()->position.y)
-//		m_dir = left;
-//	if (m_targetNode->getTransform()->position.x > m_currentNode->getTransform()->position.x && m_targetNode-> getTransform()->position.y == m_currentNode->getTransform()->position.y)
-//		m_dir = right;
-//	if (m_currentNode == m_targetNode)
-//	{
-//		PathNode* temp = start_point;
-//		start_point = end_point;
-//		end_point = temp;
-//		temp = nullptr;
-//		m_nodeIndex = 0;
-//	}
-//}
 
 void Warrior::reset()
 {
-	//if (m_bIsActive == true)
-	//{
-		getTransform()->position.x = -1000;
-		getTransform()->position.y = -1000;
-		m_bIsActive = false;
-	//}
+	getTransform()->position.x = -1000;
+	getTransform()->position.y = -1000;
+	m_bIsActive = false;
 }
 
 void Warrior::setActive()
-{
-	//set animation
-	
+{	
 	m_bIsActive = true;
-	
+	m_outerState = FIGHT;
+	m_innerState = PATROL;
+
+	m_withinMeleeRange = false;
+	m_attackMode = false;
 }
 
