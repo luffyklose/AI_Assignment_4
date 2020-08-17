@@ -5,17 +5,17 @@
 Player::Player(float x,float y): m_currentAnimationState(PLAYER_IDLE_RIGHT)
 {
 	TextureManager::Instance()->loadSpriteSheet(
-		"../Assets/sprites/kaben.txt",
-		"../Assets/sprites/kaben.png",
-		"kaben");
+		"../Assets/sprites/hero.txt",
+		"../Assets/sprites/hero.png",
+		"hero");
 
-	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("kaben"));
+	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("hero"));
 	
 	// set frame width
-	setWidth(40);
+	setWidth(48);
 
 	// set frame height
-	setHeight(40);
+	setHeight(48);
 
 	getTransform()->position = glm::vec2(x,y);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
@@ -44,27 +44,27 @@ void Player::draw()
 	switch(m_currentAnimationState)
 	{
 	case PLAYER_IDLE_RIGHT:
-		TextureManager::Instance()->playAnimation("kaben", getAnimation("idle"),
-			x, y, getWidth(), getHeight(), 0.12f, 0, 255, true);
+		TextureManager::Instance()->playAnimation("hero", getAnimation("idle"),
+			x, y, getWidth(),getHeight(),0.1f, 0, 255, true);
 		break;
 	case PLAYER_IDLE_LEFT:
-		TextureManager::Instance()->playAnimation("kaben", getAnimation("idle"),
-			x, y, getWidth(), getHeight(), 0.12f, 0, 255, true, SDL_FLIP_HORIZONTAL);
+		TextureManager::Instance()->playAnimation("hero", getAnimation("idle"),
+			x, y, getWidth(), getHeight(),0.1f, 0, 255, true, SDL_FLIP_HORIZONTAL);
 		break;
-	case PLAYER_RUN_RIGHT:
-		TextureManager::Instance()->playAnimation("kaben", getAnimation("run"),
-			x, y, getWidth(), getHeight(), 0.25f, 0, 255, true);
+	case PLAYER_WALK_RIGHT:
+		TextureManager::Instance()->playAnimation("hero", getAnimation("walk_right"),
+			x, y, getWidth(), getHeight(),0.1f, 0, 255, true);
 		break;
-	case PLAYER_RUN_LEFT:
-		TextureManager::Instance()->playAnimation("kaben", getAnimation("run"),
-			x, y, getWidth(), getHeight(), 0.25f, 0, 255, true, SDL_FLIP_HORIZONTAL);
+	case PLAYER_WALK_LEFT:
+		TextureManager::Instance()->playAnimation("hero", getAnimation("walk_right"),
+			x, y, getWidth(), getHeight(), 0.1f, 0, 255, true, SDL_FLIP_HORIZONTAL);
 		break;
-	case PLAYER_HIT_RIGHT:
-		TextureManager::Instance()->playAnimation("kaben", getAnimation("hit"),
-			x, y, getWidth() * (74.0 / 64.0), getHeight(), 0.25f, 0, 255, true);
-	case PLAYER_HIT_LEFT:
-		TextureManager::Instance()->playAnimation("kaben", getAnimation("hit"),
-			x, y, getWidth()*(74.0/64.0), getHeight(), 0.25f, 0, 255, true, SDL_FLIP_HORIZONTAL);
+	case PLAYER_WALK_UP:
+		TextureManager::Instance()->playAnimation("hero", getAnimation("walk_up"),
+			x, y, getWidth(), getWidth(), 0.1f, 0, 255, true);
+	case PLAYER_WALK_DOWN:
+		TextureManager::Instance()->playAnimation("hero", getAnimation("walk_down"),
+			x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
 	default:
 		break;
 	}
@@ -112,38 +112,83 @@ void Player::setAnimationState(const PlayerAnimationState new_state)
 void Player::m_buildAnimations()
 {
 	Animation idleAnimation = Animation();
-
 	idleAnimation.name = "idle";
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-idle-0"));
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-idle-1"));
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-idle-2"));
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-idle-3"));
-	
+	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_idle_0"));
+	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_idle_1"));
+	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_idle_2"));
 	setAnimation(idleAnimation);
 
-	Animation walkAnimation = Animation();
+	Animation walk_rightAnimation = Animation();
+	walk_rightAnimation.name = "walk_right";
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_right_0"));
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_right_1"));
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_right_2"));
+	walk_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_right_3"));
+	setAnimation(walk_rightAnimation);
 
-	walkAnimation.name = "walk";
-	walkAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-walk-0"));
-	walkAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-walk-1"));
-	walkAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-walk-2"));
-	walkAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-walk-3"));
-	walkAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-walk-4"));
-	walkAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-walk-5"));
-	walkAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-walk-6"));
-	walkAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-walk-7"));
-	setAnimation(walkAnimation);
+	Animation walk_upAnimation = Animation();
+	walk_upAnimation.name = "walk_up";
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_up_0"));
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_up_1"));
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_up_2"));
+	walk_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_up_3"));
+	setAnimation(walk_upAnimation);
 
-	Animation hitAnimation = Animation();
-	hitAnimation.name = "hit";
-	hitAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-hit-0"));
-	hitAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-hit-1"));
-	hitAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-hit-2"));
-	hitAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-hit-3"));
-	hitAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-hit-4"));
-	hitAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-hit-5"));
-	hitAnimation.frames.push_back(getSpriteSheet()->getFrame("kaben-hit-6"));
-	setAnimation(hitAnimation);
+	Animation walk_downAnimation = Animation();
+	walk_downAnimation.name = "walk_down";
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_down_0"));
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_down_1"));
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_down_2"));
+	walk_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_walk_down_3"));
+	setAnimation(walk_downAnimation);
+
+	Animation hit_rightAnimation = Animation();
+	hit_rightAnimation.name = "hit_right";
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_right_0"));
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_right_1"));
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_right_2"));
+	hit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_right_3"));
+	setAnimation(hit_rightAnimation);
+
+	Animation hit_upAnimation = Animation();
+	hit_upAnimation.name = "hit_up";
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_up_0"));
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_up_1"));
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_up_2"));
+	hit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_up_3"));
+	setAnimation(hit_upAnimation);
+
+	Animation hit_downAnimation = Animation();
+	hit_downAnimation.name = "hit_down";
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_down_0"));
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_down_1"));
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_down_2"));
+	hit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_hit_down_3"));
+	setAnimation(hit_downAnimation);
+
+	Animation behit_rightAnimation = Animation();
+	behit_rightAnimation.name = "behit_right";
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_right_0"));
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_right_1"));
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_right_2"));
+	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_right_3"));
+	setAnimation(behit_rightAnimation);
+
+	Animation behit_upAnimation = Animation();
+	behit_upAnimation.name = "behit_up";
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_up_0"));
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_up_1"));
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_up_2"));
+	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_up_3"));
+	setAnimation(behit_upAnimation);
+
+	Animation behit_downAnimation = Animation();
+	behit_upAnimation.name = "behit_down";
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_down_0"));
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_down_1"));
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_down_2"));
+	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("hero_behit_down_3"));
+	setAnimation(behit_downAnimation);
 }
 
 int Player::getMeleeDamage()

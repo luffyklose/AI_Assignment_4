@@ -245,7 +245,7 @@ void PlayScene::handleEvents()
 			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(-5.0f, 0.0f), DestructibleObstacleManager::Instance()->getSteanVec()) &&
 			m_pPlayer->getTransform()->position.x > 0.5f * m_pPlayer->getWidth())
 		{
-			m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
+			m_pPlayer->setAnimationState(PLAYER_WALK_LEFT);
 			m_pPlayer->setDirection(Sprite::left);
 
 			m_pPlayer->getRigidBody()->velocity = glm::vec2(-5.0f, 0.0f);
@@ -258,7 +258,7 @@ void PlayScene::handleEvents()
 			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(5.0f, 0.0f), DestructibleObstacleManager::Instance()->getSteanVec()) &&
 			m_pPlayer->getTransform()->position.x < Config::SCREEN_WIDTH - 0.5f * m_pPlayer->getWidth())
 		{
-			m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
+			m_pPlayer->setAnimationState(PLAYER_WALK_RIGHT);
 			m_pPlayer->setDirection(Sprite::right);
 
 			m_pPlayer->getRigidBody()->velocity = glm::vec2(5.0f, 0.0f);
@@ -271,6 +271,7 @@ void PlayScene::handleEvents()
 			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, -5.0f), DestructibleObstacleManager::Instance()->getSteanVec()) &&
 			m_pPlayer->getTransform()->position.y > 0.5f * m_pPlayer->getHeight())
 		{
+			m_pPlayer->setAnimationState(PLAYER_WALK_UP);
 			m_pPlayer->setDirection(Sprite::up);
 			
 			m_pPlayer->getRigidBody()->velocity = glm::vec2(0.0f, -5.0f);
@@ -283,6 +284,7 @@ void PlayScene::handleEvents()
 			!CollisionManager::PlayerCollision(m_pPlayer, glm::vec2(0.0f, 5.0f), DestructibleObstacleManager::Instance()->getSteanVec()) &&
 			m_pPlayer->getTransform()->position.y < Config::SCREEN_HEIGHT - 0.5f * m_pPlayer->getHeight())
 		{
+			m_pPlayer->setAnimationState(PLAYER_WALK_DOWN);
 			m_pPlayer->setDirection(Sprite::down);
 			
 			m_pPlayer->getRigidBody()->velocity = glm::vec2(0.0f, 5.0f);
@@ -290,8 +292,19 @@ void PlayScene::handleEvents()
 			m_pPlayer->getRigidBody()->velocity *= m_pPlayer->getRigidBody()->velocity * 0.9f;
 			SoundManager::Instance().playSound("step", 0, -1);
 		}
+		else
+		{
+			if (m_pPlayer->getDirection()==Sprite::right || m_pPlayer->getDirection() == Sprite::down)
+			{
+				m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
+			}
+			else if(m_pPlayer->getDirection() == Sprite::left || m_pPlayer->getDirection() == Sprite::up)
+			{
+				m_pPlayer->setAnimationState(PLAYER_IDLE_LEFT);
+			}
+		}
 		
-		switch (m_pPlayer->getDirection())
+		/*switch (m_pPlayer->getDirection())
 		{
 		case Sprite::left:
 			m_pPlayer->setAnimationState(PLAYER_IDLE_LEFT);
@@ -307,7 +320,7 @@ void PlayScene::handleEvents()
 			break;
 		default:
 			break;
-		}
+		}*/
 	}
 
 	if(!m_pRightButtonPressed)
@@ -721,7 +734,7 @@ void PlayScene::start()
 	
 	//EnemyManager::Instance()->generateWarrior();
 	
-	EnemyManager::Instance()->generateArcher();
+	//EnemyManager::Instance()->generateArcher();
 
 	//Set Fireball
 	ProjectileManager::Instance()->Init();
@@ -743,9 +756,6 @@ void PlayScene::start()
 	{
 		addChild(obstacle);
 	}
-
-	
-	
 	
 	//m_playerFacingRight = true;
 
