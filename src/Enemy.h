@@ -51,6 +51,7 @@ public:
 	void MoveEnemy();
 	void Flee();
 	void setCurNode();
+	void setDir();
 protected:
 	
 public:

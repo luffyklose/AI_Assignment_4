@@ -297,6 +297,7 @@ void Enemy::Move2LOS()
 
 void Enemy::MoveEnemy()
 {
+	setDir();
 	auto targetVector = Util::normalize(m_targetNode->getTransform()->position - this->getTransform()->position);
 	//std::cout << "x: " << targetVector.x << " y:" << targetVector.y << std::endl;
 
@@ -339,6 +340,20 @@ void Enemy::setCurNode()
 			m_currentNode = pathnode;
 		}
 	}
+}
+
+void Enemy::setDir()
+{
+	if (m_pTargetPathNode == nullptr || m_currentNode == nullptr)
+		return;
+	else if (m_targetNode->getTransform()->position.x == m_currentNode->getTransform()->position.x && m_targetNode->getTransform()->position.y > m_currentNode->getTransform()->position.y)
+		m_dir = down;
+	else if (m_targetNode->getTransform()->position.x == m_currentNode->getTransform()->position.x && m_targetNode->getTransform()->position.y < m_currentNode->getTransform()->position.y)
+		m_dir = up;
+	else if (m_targetNode->getTransform()->position.x < m_currentNode->getTransform()->position.x && m_targetNode->getTransform()->position.y == m_currentNode->getTransform()->position.y)
+		m_dir = left;
+	else if (m_targetNode->getTransform()->position.x > m_currentNode->getTransform()->position.x && m_targetNode->getTransform()->position.y == m_currentNode->getTransform()->position.y)
+		m_dir = right;
 }
 
 void Enemy::setCurTargetKdyNode(KeyNode* target)
