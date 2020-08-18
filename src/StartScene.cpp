@@ -73,7 +73,7 @@ void StartScene::start()
 	m_pLogo = new Image(400, 200);
 	addChild(m_pLogo);
 	
-	m_pNameLabel = new Label("Zihan Xu 101288706 Yiliqi 101289355", "Consolas", 20, color, glm::vec2(400.0f, 550.0f));
+	m_pNameLabel = new Label("Zihan Xu 101288760 Yiliqi 101289355", "Consolas", 20, color, glm::vec2(400.0f, 550.0f));
 	m_pNameLabel->setParent(this);
 	addChild(m_pNameLabel);
 
