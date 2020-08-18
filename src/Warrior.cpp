@@ -61,7 +61,7 @@ void Warrior::draw()
 	// draw the plane sprite with simple propeller animation
 	if (m_outerState == HITRECOVER)
 	{
-		std::cout << "be hit: " << m_outerState << " " << m_dir << std::endl;
+		//std::cout << "be hit: " << m_outerState << " " << m_dir << std::endl;
 		switch (m_dir)
 		{
 		case left:
@@ -407,7 +407,7 @@ void Warrior::m_stateMachineUpdate()
 			{
 				// Perform Melee Attack Action
 				Melee();
-				std::cout << "Meleeing..." << std::endl;
+				//std::cout << "Meleeing..." << std::endl;
 				break;
 			}
 			case MOVE_TO_LOS:
@@ -440,7 +440,7 @@ void Warrior::m_stateMachineUpdate()
 	{
 		// Flee Action
 		Flee();
-		std::cout << "Fleeing..." << std::endl;
+		//std::cout << "Fleeing..." << std::endl;
 		break;
 	}
 	}
@@ -512,6 +512,12 @@ void Warrior::Move2NearestAttackNode()
 			return;
 		PathManager::GetShortestPath(m_currentNode, m_pTargetPathNode);
 		m_path = PathManager::getPath();
+		if (m_path.empty())
+		{
+			std::cout << "cur: " << m_currentNode->getTransform()->position.x << " " << m_currentNode->getTransform()->position.y << std::endl;;
+			std::cout << "target: " << m_pTargetPathNode->getTransform()->position.x << " " << m_pTargetPathNode->getTransform()->position.y << std::endl;
+			return;
+		}
 		m_currentNode = m_path.front()->GetFromNode();
 		m_targetNode = m_path.front()->GetToNode();
 		m_nodeIndex = 0;
@@ -530,9 +536,9 @@ void Warrior::Melee()
 	if (m_meleeCounter < MELEECD)
 		return;
 	m_meleeCounter = 0;
-	std::cout << "enter melee" << std::endl;
-	std::cout << "Enemy: " << this->m_currentNode->getTransform()->position.x << " " << this->m_currentNode->getTransform()->position.y
-		<< "Player: " << m_pTargetPlayer->getCurNode()->getTransform()->position.x << " " << m_pTargetPlayer->getCurNode()->getTransform()->position.y << std::endl;
+	//std::cout << "enter melee" << std::endl;
+	//std::cout << "Enemy: " << this->m_currentNode->getTransform()->position.x << " " << this->m_currentNode->getTransform()->position.y
+	//	<< "Player: " << m_pTargetPlayer->getCurNode()->getTransform()->position.x << " " << m_pTargetPlayer->getCurNode()->getTransform()->position.y << std::endl;
 	if (this->m_currentNode->getTransform()->position.x == m_pTargetPlayer->getCurNode()->getTransform()->position.x &&
 		this->m_currentNode->getTransform()->position.y < m_pTargetPlayer->getCurNode()->getTransform()->position.y)
 	{

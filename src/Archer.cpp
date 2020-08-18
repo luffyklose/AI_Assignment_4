@@ -72,31 +72,31 @@ void Archer::draw()
 
 	if (m_outerState == HITRECOVER)
 	{
-		std::cout << "be hit: " << m_outerState << " " << m_dir << std::endl;
+		//std::cout << "be hit: " << m_outerState << " " << m_dir << std::endl;
 		switch (m_dir)
 		{
 		case left:
 			TextureManager::Instance()->playAnimation(
 				"archer", getAnimation("be_hit_right"),
 				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-			std::cout << "be hit left" << std::endl;
+			//std::cout << "be hit left" << std::endl;
 			break;
 		case right:
 			TextureManager::Instance()->playAnimation(
 				"archer", getAnimation("be_hit_right"),
 				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-			std::cout << "be hit right" << std::endl;
+			//std::cout << "be hit right" << std::endl;
 		case up:
 			TextureManager::Instance()->playAnimation(
 				"archer", getAnimation("be_hit_up"),
 				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-			std::cout << "be hit up" << std::endl;
+			//std::cout << "be hit up" << std::endl;
 			break;
 		case down:
 			TextureManager::Instance()->playAnimation(
 				"archer", getAnimation("be_hit_up"),
 				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-			std::cout << "be hit down" << std::endl;
+			//std::cout << "be hit down" << std::endl;
 			break;
 		default:break;
 		}
@@ -378,7 +378,7 @@ void Archer::m_checkCurrentConditions()
 					if(!m_hasLOS)
 					{
 						m_attackMode = true;
-						std::cout << "set attack mode to " << m_attackMode<< std::endl;
+						//std::cout << "set attack mode to " << m_attackMode<< std::endl;
 						if(M_withinShootRange)
 						{
 							m_innerState = RANGED_ATTACK;
@@ -467,7 +467,7 @@ void Archer::m_stateMachineUpdate()
 		{
 			// Flee Action
 			Flee();
-			std::cout << "Fleeing..." << std::endl;
+			//std::cout << "Fleeing..." << std::endl;
 			break;
 		}
 		break;
@@ -498,9 +498,6 @@ void Archer::Move2NearestAttackNode()
 		{
 			NodeDis = ThisDistance;
 			TargetPathNode = pathnode;
-			//std::cout << TargetPathNode << std::endl;
-			//std::cout << "this node: " << pathnode->getTransform()->position.x << " " << pathnode->getTransform()->position.y << std::endl;
-			//std::cout << "set target at " << TargetPathNode->getTransform()->position.x << " " << TargetPathNode->getTransform()->position.y << std::endl;
 		}
 	}
 	//std::cout << "distance:" << NodeDis << std::endl;
@@ -515,6 +512,12 @@ void Archer::Move2NearestAttackNode()
 			return;
 		PathManager::GetShortestPath(m_currentNode, m_pTargetPathNode);
 		m_path = PathManager::getPath();
+		if (m_path.empty())
+		{
+			std::cout << "cur: " << m_currentNode->getTransform()->position.x << " " << m_currentNode->getTransform()->position.y << std::endl;;
+			std::cout << "target: " << m_pTargetPathNode->getTransform()->position.x << " " << m_pTargetPathNode->getTransform()->position.y << std::endl;
+			return;
+		}
 		m_currentNode = m_path.front()->GetFromNode();
 		m_targetNode = m_path.front()->GetToNode();
 		m_nodeIndex = 0;
@@ -588,7 +591,7 @@ void Archer::setFaceDir()
 	{
 		setDirection(down);
 	}
-	std::cout << "angle: " << Angle << " Dir: " << m_dir << std::endl;
+	//sstd::cout << "angle: " << Angle << " Dir: " << m_dir << std::endl;
 }
 
 void Archer::Move2Cover()
@@ -621,6 +624,12 @@ void Archer::Move2Cover()
 			return;
 		PathManager::GetShortestPath(m_currentNode, m_pTargetPathNode);
 		m_path = PathManager::getPath();
+		if (m_path.empty())
+		{
+			std::cout << "cur: " << m_currentNode->getTransform()->position.x << " " << m_currentNode->getTransform()->position.y << std::endl;;
+			std::cout << "target: " << m_pTargetPathNode->getTransform()->position.x << " " << m_pTargetPathNode->getTransform()->position.y << std::endl;
+			return;
+		}
 		m_currentNode = m_path.front()->GetFromNode();
 		m_targetNode = m_path.front()->GetToNode();
 		m_nodeIndex = 0;

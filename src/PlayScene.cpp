@@ -434,7 +434,7 @@ void PlayScene::handleEvents()
 				break;
 
 			case Sprite::right:
-				temp.x = m_pPlayer->getTransform()->position.x + 0.5f * m_pPlayer->getWidth();
+				temp.x = m_pPlayer->getTransform()->position.x + 0.5f * m_pPlayer->getWidth()+1;
 				temp.y = m_pPlayer->getTransform()->position.y - 0.5f * m_pPlayer->getHeight();
 				temp.w = m_pPlayer->getMeleeRange();
 				temp.h = m_pPlayer->getHeight();
@@ -449,12 +449,13 @@ void PlayScene::handleEvents()
 
 			case Sprite::down:
 				temp.x = m_pPlayer->getTransform()->position.x - 0.5f * this->getWidth();
-				temp.y = m_pPlayer->getTransform()->position.y + 0.5f * this->getHeight();
+				temp.y = m_pPlayer->getTransform()->position.y + 0.5f * this->getHeight()-1;
 				temp.w = m_pPlayer->getWidth();
 				temp.h = m_pPlayer->getMeleeRange();
 				break;
 			}
-
+			//std::cout << "temp: " << temp.x << " " << temp.y << std::endl;
+			
 			for (auto m_pEnemy : EnemyManager::Instance()->getEnemyVec())
 			{
 				if (CollisionManager::AABBCheck(temp, m_pEnemy))

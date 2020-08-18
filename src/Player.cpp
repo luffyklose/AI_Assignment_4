@@ -156,7 +156,7 @@ void Player::draw()
 			TextureManager::Instance()->playAnimation(
 				"hero", getAnimation("hit_up"),
 				x, y, getWidth(), getHeight(), 0.2f, 0, 255, true);
-			if (getAnimation("hit_up").current_frame >= getAnimation("hit_right").frames.size() - 1)
+			if (getAnimation("hit_up").current_frame >= getAnimation("hit_up").frames.size() - 1)
 			{
 				getAnimation("hit_up").current_frame = 0;
 				m_currentState = PLAYER_IDLE;
@@ -166,9 +166,9 @@ void Player::draw()
 			TextureManager::Instance()->playAnimation(
 				"hero", getAnimation("hit_down"),
 				x, y, getWidth(), getHeight(), 0.2f, 0, 255, true);
-			if (getAnimation("hit_up").current_frame >= getAnimation("hit_right").frames.size() - 1)
+			if (getAnimation("hit_down").current_frame >= getAnimation("hit_down").frames.size() - 1)
 			{
-				getAnimation("hit_up").current_frame = 0;
+				getAnimation("hit_down").current_frame = 0;
 				m_currentState = PLAYER_IDLE;
 			}
 			break;

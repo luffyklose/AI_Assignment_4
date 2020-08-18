@@ -220,9 +220,15 @@ void Enemy::Flee()
 		if (m_currentNode == m_pTargetPathNode)
 		{			
 			return;
-		}			
+		}
 		PathManager::GetShortestPath(m_currentNode, m_pTargetPathNode);
 		m_path = PathManager::getPath();
+		if (m_path.empty())
+		{
+			std::cout << "cur: " << m_currentNode->getTransform()->position.x << " " << m_currentNode->getTransform()->position.y << std::endl;;
+			std::cout << "target: " << m_pTargetPathNode->getTransform()->position.x << " " << m_pTargetPathNode->getTransform()->position.y << std::endl;
+			return;
+		}
 		m_currentNode = m_path.front()->GetFromNode();
 		m_targetNode = m_path.front()->GetToNode();
 		m_nodeIndex = 0;
@@ -268,6 +274,12 @@ void Enemy::Move2LOS()
 			return;
 		PathManager::GetShortestPath(m_currentNode, m_pTargetPathNode);
 		m_path = PathManager::getPath();
+		if (m_path.empty())
+		{
+			std::cout << "cur: " << m_currentNode->getTransform()->position.x << " " << m_currentNode->getTransform()->position.y << std::endl;;
+			std::cout << "target: " << m_pTargetPathNode->getTransform()->position.x << " " << m_pTargetPathNode->getTransform()->position.y << std::endl;
+			return;
+		}			
 		m_currentNode = m_path.front()->GetFromNode();
 		m_targetNode = m_path.front()->GetToNode();
 		m_nodeIndex = 0;
