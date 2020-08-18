@@ -1,28 +1,28 @@
-#include "EndScene.h"
+#include "WinScene.h"
 #include <algorithm>
 #include "Game.h"
 #include "glm/gtx/string_cast.hpp"
 #include "EventManager.h"
 
-EndScene::EndScene()
+WinScene::WinScene()
 {
-	EndScene::start();
+	WinScene::start();
 }
 
-EndScene::~EndScene()
+WinScene::~WinScene()
 = default;
 
-void EndScene::draw()
+void WinScene::draw()
 {
 	drawDisplayList();
 }
 
-void EndScene::update()
+void WinScene::update()
 {
 	updateDisplayList();
 }
 
-void EndScene::clean()
+void WinScene::clean()
 {
 	delete m_label;
 
@@ -32,7 +32,7 @@ void EndScene::clean()
 	removeAllChildren();
 }
 
-void EndScene::handleEvents()
+void WinScene::handleEvents()
 {
 	EventManager::Instance().update();
 
@@ -51,10 +51,10 @@ void EndScene::handleEvents()
 	}
 }
 
-void EndScene::start()
+void WinScene::start()
 {
 	const SDL_Color blue = { 0, 0, 255, 255 };
-	m_label = new Label("END SCENE", "Dock51", 80, blue, glm::vec2(400.0f, 40.0f));
+	m_label = new Label("You Win!", "Dock51", 80, blue, glm::vec2(400.0f, 240.0f));
 	m_label->setParent(this);
 	addChild(m_label);
 

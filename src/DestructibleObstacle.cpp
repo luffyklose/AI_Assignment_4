@@ -13,7 +13,9 @@ DestructibleObstacle::DestructibleObstacle()
 
 	setType(OBSTACLE);
 	m_curHealth = STEANMAXHP;
-
+	this->m_pFiller = new HealthBarFiller(this);
+	this->m_pBorder = new HealthBarBorder(this);
+	
 	reset();
 }
 
@@ -35,10 +37,15 @@ void DestructibleObstacle::draw()
 	{
 		TextureManager::Instance()->draw("brokenStean", x, y, getWidth(), getHeight(), 0, 255, true);
 	}
+	
+	m_pBorder->draw();
+	m_pFiller->draw();
 }
 
 void DestructibleObstacle::update()
 {
+	m_pFiller->update();
+	m_pBorder->update();
 }
 
 void DestructibleObstacle::clean()

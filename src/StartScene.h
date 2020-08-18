@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include "Label.h"
 #include "Button.h"
+#include "Sprite.h"
+#include "Image.h"
 
 class StartScene final : public Scene
 {
@@ -23,7 +25,7 @@ private:
 	Label* m_pStartLabel{};
 	Label* m_pInstructionsLabel{};
 	Label* m_pNameLabel{};
-
+	Image* m_pLogo;
 
 	Button* m_pStartButton;
 };

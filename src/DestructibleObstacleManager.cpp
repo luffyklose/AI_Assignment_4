@@ -29,10 +29,13 @@ void DestructibleObstacleManager::exit()
 		stean = nullptr;
 	}
 
-	for (auto stean : m_steanVec)
+	if (!m_steanVec.empty())
 	{
-		delete stean;
-		stean = nullptr;
+		for (auto stean : m_steanVec)
+		{
+			stean = nullptr;
+		}
+		m_steanVec.erase(remove(m_steanVec.begin(), m_steanVec.end(), nullptr), m_steanVec.end());
 	}
 
 	m_pDestructibleObjectPool.clear();

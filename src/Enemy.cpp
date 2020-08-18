@@ -32,10 +32,10 @@ void Enemy::DecHP(int damage)
 	if (m_curHealth < 0)
 	{
 		m_curHealth = 0;
-		//ExplosionManager::Instance()->generateExplosion();
-		//auto explosion = ExplosionManager::Instance()->getExplosionList().back();
-		//explosion->getTransform()->position = this->getTransform()->position;
-		//reset();
+		ExplosionManager::Instance()->generateExplosion();
+		auto explosion = ExplosionManager::Instance()->getExplosionList().back();
+		explosion->getTransform()->position = this->getTransform()->position;
+		reset();
 	}
 }
 
@@ -47,19 +47,6 @@ int Enemy::getDetectionRadius()
 
 void Enemy::setPath(std::vector<PathNode*> PatrolPath)
 {
-	/*if(start_point == nullptr || end_point == nullptr)
-	{
-		std::cout << "Cannot get shortest Path" << std::endl;
-		return;
-	}
-	
-	PathManager::GetShortestPath(start_point, end_point);
-	std::cout << "Get: " << PathManager::getPath().size() << std::endl;
-	m_path = std::move(PathManager::getPath());
-	m_currentNode = m_path[0]->GetFromNode();
-	m_targetNode = m_path[0]->GetToNode();
-	std::cout << "Path: " << m_path.size() << std::endl;*/
-
 	m_pPatrolPath = PatrolPath;
 }
 
@@ -139,12 +126,12 @@ void Enemy::AddKeyNode(PathNode* keyNode)
 
 void Enemy::PatrolMove()
 {
-	if((int)m_pKeyNodeVec.size()<2)
-		{
-			//std::cout << "Key Node is smaller than 2" << std::endl;
-			return;
-		}
-	if(m_path.empty())
+	if ((int)m_pKeyNodeVec.size() < 2)
+	{
+		//std::cout << "Key Node is smaller than 2" << std::endl;
+		return;
+	}
+	if (m_path.empty())
 	{
 		//std::cout << m_curTargetKeyNode->m_keyNode->getTransform()->position.x << " " << m_curTargetKeyNode->m_keyNode->getTransform()->position.y << std::endl;
 		//std::cout << m_curTargetKeyNode->m_nextNode->m_keyNode->getTransform()->position.x << " " << m_curTargetKeyNode->m_nextNode->m_keyNode->getTransform()->position.y << std::endl;
@@ -155,10 +142,8 @@ void Enemy::PatrolMove()
 		m_nodeIndex = 0;
 		std::cout << "Target:" << m_targetNode->getTransform()->position.x << " " << m_targetNode->getTransform()->position.y << std::endl;
 	}
-	
-	MoveEnemy();
-	
-	if(abs(Util::distance(this->getTransform()->position, m_curTargetKeyNode->m_keyNode->getTransform()->position)) < 10.0f)
+
+	if (abs(Util::distance(this->getTransform()->position, m_curTargetKeyNode->m_keyNode->getTransform()->position)) < 10.0f)
 	{
 		PathManager::GetShortestPath(m_curTargetKeyNode->m_keyNode, m_curTargetKeyNode->m_nextNode->m_keyNode);
 		m_path = PathManager::getPath();
@@ -168,7 +153,10 @@ void Enemy::PatrolMove()
 		std::cout << "To: " << m_curTargetKeyNode->m_keyNode->getTransform()->position.x << " " << m_curTargetKeyNode->m_keyNode->getTransform()->position.y << std::endl;
 		m_nodeIndex = 0;
 	}
-	else if(abs(Util::distance(this->getTransform()->position, m_targetNode->getTransform()->position)) < 10.0f)
+
+	MoveEnemy();
+
+	if (abs(Util::distance(this->getTransform()->position, m_targetNode->getTransform()->position)) < 10.0f)
 	{
 		SetNextNode();
 	}
@@ -260,16 +248,12 @@ void Enemy::Move2LOS()
 		{
 			NodeDis = tempDistance;
 			TargetPathNode = pathnode;
-			//std::cout << "set distance as first value" << std::endl;
 		}
 		//std::cout << pathnode->getLOS() << " " << NodeDis << " " << tempDistance << std::endl;
 		if (pathnode->getLOS() == false && tempDistance < NodeDis)
 		{
 			NodeDis = tempDistance;
 			TargetPathNode = pathnode;
-			//std::cout << TargetPathNode << std::endl;
-			//std::cout << "this node: " << pathnode->getTransform()->position.x << " " << pathnode->getTransform()->position.y << std::endl;
-			//std::cout << "set target at " << TargetPathNode->getTransform()->position.x << " " << TargetPathNode->getTransform()->position.y << std::endl;
 		}
 	}
 	//std::cout << "distance:" << NodeDis << std::endl;
@@ -344,7 +328,7 @@ void Enemy::setCurNode()
 
 void Enemy::setDir()
 {
-	if (m_pTargetPathNode == nullptr || m_currentNode == nullptr)
+	if (m_targetNode == nullptr || m_currentNode == nullptr)
 		return;
 	else if (m_targetNode->getTransform()->position.x == m_currentNode->getTransform()->position.x && m_targetNode->getTransform()->position.y > m_currentNode->getTransform()->position.y)
 		m_dir = down;

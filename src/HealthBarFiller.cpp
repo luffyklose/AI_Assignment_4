@@ -1,6 +1,9 @@
 #include "HealthBarFiller.h"
 #include "../src/TextureManager.h"
 
+const int FILLERWIDTH = 40;
+const int FILLERHEIGHT = 5;
+
 HealthBarFiller::HealthBarFiller(Sprite* sp)
 {
 	this->m_pSp = sp;
@@ -8,10 +11,10 @@ HealthBarFiller::HealthBarFiller(Sprite* sp)
 	TextureManager::Instance()->load("../Assets/textures/HealthBarFiller.png", "HealthBarFiller");
 
 	const auto size = TextureManager::Instance()->getTextureSize("HealthBarFiller");
-	setWidth(size.x);
-	setHeight(size.y);
-	getTransform()->position.x = sp->getTransform()->position.x;
-	getTransform()->position.y = sp->getTransform()->position.y - 40;
+	setWidth(FILLERWIDTH);
+	setHeight(FILLERHEIGHT);
+	getTransform()->position.x = sp->getTransform()->position.x - 0.5f * sp->getWidth();
+	getTransform()->position.y = sp->getTransform()->position.y - 30;
 	getRigidBody()->velocity = glm::vec2(0, 0);
 	getRigidBody()->isColliding = false;
 
@@ -27,7 +30,7 @@ void HealthBarFiller::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the target
-	TextureManager::Instance()->draw("HealthBarFiller", x, y, this->getWidth(), this->getHeight(), 0,255,true);
+	TextureManager::Instance()->draw("HealthBarFiller", x, y, this->getWidth(), this->getHeight(), 0,255,false);
 }
 
 void HealthBarFiller::update()
@@ -40,12 +43,12 @@ void HealthBarFiller::update()
 	//std::cout << "Before: " << this->getWidth() << std::endl;
 	if(temp>=0)
 	{
-		this->setWidth((int)(32 * temp));
+		this->setWidth((int)(FILLERWIDTH * temp));
 	}	
 	//std::cout << "After: " << this->getWidth() << std::endl;
 	
-	getTransform()->position.x = m_pSp->getTransform()->position.x;
-	getTransform()->position.y = m_pSp->getTransform()->position.y - 20;
+	getTransform()->position.x = m_pSp->getTransform()->position.x - 0.5f * m_pSp->getWidth();
+	getTransform()->position.y = m_pSp->getTransform()->position.y - 30;
 }
 
 void HealthBarFiller::clean()

@@ -22,7 +22,7 @@ void EnemyManager::Init()
 	m_buildWarriorPool();
 }
 
-void EnemyManager::generateArcher()
+void EnemyManager::generateArcher(int& enemyNum)
 {
 	auto archer = m_pArcherPool.front();
 	archer->setActive();
@@ -34,17 +34,20 @@ void EnemyManager::generateArcher()
 	archer->AddKeyNode(NDMA::getPathNodeVec()[70]);
 	archer->AddKeyNode(NDMA::getPathNodeVec()[130]);
 	archer->AddKeyNode(NDMA::getPathNodeVec()[180]);*/
+	archer->AddKeyNode(NDMA::getPathNodeVec()[19]);
+	archer->AddKeyNode(NDMA::getPathNodeVec()[18]);
 	archer->AddKeyNode(NDMA::getPathNodeVec()[20]);
-	archer->AddKeyNode(NDMA::getPathNodeVec()[39]);
 	archer->AddKeyNode(NDMA::getPathNodeVec()[79]);
 	archer->AddKeyNode(NDMA::getPathNodeVec()[60]);
 
 	archer->getTransform()->position = archer->getKeyNode()[0]->m_keyNode->getTransform()->position;
 	//archer->getRigidBody()->maxSpeed = 2.0f;
-	archer->setCurTargetKdyNode(archer->getKeyNode()[1]);	
+	archer->setCurTargetKdyNode(archer->getKeyNode()[1]);
+
+	enemyNum++;
 }
 
-void EnemyManager::generateWarrior()
+void EnemyManager::generateWarrior(int& enemyNum)
 {
 	auto warrior = m_pWarriorPool.front();
 	warrior->setActive();
@@ -52,13 +55,17 @@ void EnemyManager::generateWarrior()
 	m_pWarriorPool.push_back(warrior);
 	m_pEnemyVec.push_back(warrior);
 
-	warrior->AddKeyNode(NDMA::getPathNodeVec()[50]);
+	warrior->AddKeyNode(NDMA::getPathNodeVec()[235]);
+	warrior->AddKeyNode(NDMA::getPathNodeVec()[236]);
 	warrior->AddKeyNode(NDMA::getPathNodeVec()[70]);
 	warrior->AddKeyNode(NDMA::getPathNodeVec()[180]);
+	warrior->AddKeyNode(NDMA::getPathNodeVec()[39]);
 
 	warrior->getTransform()->position = warrior->getKeyNode()[0]->m_keyNode->getTransform()->position;
 	//warrior->getRigidBody()->maxSpeed = 2.0f;
 	warrior->setCurTargetKdyNode(warrior->getKeyNode()[1]);
+
+	enemyNum++;
 }
 
 void EnemyManager::update()
@@ -111,11 +118,15 @@ void EnemyManager::exit()
 		delete enemy;
 		enemy = nullptr;
 	}
-	for (auto enemy : m_pEnemyVec)
+	if(!m_pEnemyVec.empty())
 	{
-		delete enemy;
-		enemy = nullptr;
+		for (auto enemy : m_pEnemyVec)
+		{
+			enemy = nullptr;
+		}
+		m_pEnemyVec.erase(remove(m_pEnemyVec.begin(), m_pEnemyVec.end(), nullptr), m_pEnemyVec.end());
 	}
+	
 
 	m_pArcherPool.clear();
 	m_pWarriorPool.clear();

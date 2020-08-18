@@ -107,17 +107,22 @@ void ProjectileManager::exit()
 		delete fireball;
 		fireball = nullptr;
 	}
-	for (auto fireball : m_playerFireVec)
+	if(!m_playerFireVec.empty())
 	{
-		delete fireball;
-		fireball = nullptr;
+		for (auto fireball : m_playerFireVec)
+		{
+			fireball = nullptr;
+		}
+		m_playerFireVec.erase(remove(m_playerFireVec.begin(), m_playerFireVec.end(), nullptr), m_playerFireVec.end());
 	}
-	for (auto fireball : m_enemyFireVec)
+	if (!m_enemyFireVec.empty())
 	{
-		delete fireball;
-		fireball = nullptr;
+		for (auto fireball : m_enemyFireVec)
+		{
+			fireball = nullptr;
+		}
+		m_enemyFireVec.erase(remove(m_enemyFireVec.begin(), m_enemyFireVec.end(), nullptr), m_enemyFireVec.end());
 	}
-
 	m_pFireBallPool.clear();
 
 	m_playerFireVec.clear();

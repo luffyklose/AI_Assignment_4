@@ -59,7 +59,9 @@ private:
 		m_pLeftButtonPressed,
 		m_pRightButtonPressed;
 
-	int m_pathNodeNum;
+	int m_pathNodeNum,
+		m_score,
+		m_aliveEnemyNum;
 
 	//Obstacle* m_pStean;
 	//static std::vector<PathNode*> m_pathNodeVec;
@@ -74,9 +76,7 @@ private:
 	std::vector<Tile*> m_obstacleVec;
 	
 	Label* m_pScoreLabel;
-	Label* m_pEnemyKilledLabel;
-
-	//int m_enemyKilled{};
+	//Label* m_pEnemyKilledLabel;
 };
 
 

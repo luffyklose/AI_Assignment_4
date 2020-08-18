@@ -52,6 +52,7 @@ public:
 	void Flee();
 	void setCurNode();
 	void setDir();
+	void resetHitRecover() { m_hitRecoverCounter = 0; }
 protected:
 	
 public:

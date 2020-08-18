@@ -181,29 +181,27 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_down_0.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_down_03.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_right_0.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_right_3.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_up_0.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_up_3.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_idle_0.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_idle_1.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_idle_2.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_down_1.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_down_0.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_down_3.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_up_0.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_up_3.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_idle_0.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_down_3.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_up_2.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_up_3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>4,5,8,9</rect>
+                <rect>3,4,6,7</rect>
                 <key>scale9Paddings</key>
-                <rect>4,5,8,9</rect>
+                <rect>3,4,6,7</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_down_1.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_down_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -216,25 +214,64 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_down_2.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_down_2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>5,5,9,10</rect>
+                <rect>4,5,9,10</rect>
                 <key>scale9Paddings</key>
-                <rect>5,5,9,10</rect>
+                <rect>4,5,9,10</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_right_1.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_right_2.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_up_1.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_up_2.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_right_0.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_right_1.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_right_0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,3,7,7</rect>
+                <key>scale9Paddings</key>
+                <rect>4,3,7,7</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_right_1.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_right_2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>5,5,10,9</rect>
+                <key>scale9Paddings</key>
+                <rect>5,5,10,9</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_right_3.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_idle_1.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_down_2.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_right_2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,4,7,7</rect>
+                <key>scale9Paddings</key>
+                <rect>4,4,7,7</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_up_1.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_behit_up_2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -247,165 +284,224 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_down_0.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_down_0.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_right_0.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_up_0.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_idle_2.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_right_1.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_up_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>5,6,11,13</rect>
+                <rect>4,3,8,7</rect>
                 <key>scale9Paddings</key>
-                <rect>5,6,11,13</rect>
+                <rect>4,3,8,7</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_down_1.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_up_1.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_down_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>7,7,13,13</rect>
+                <rect>4,5,7,11</rect>
                 <key>scale9Paddings</key>
-                <rect>7,7,13,13</rect>
+                <rect>4,5,7,11</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_down_2.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_down_3.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_down_2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>6,5,13,9</rect>
+                <rect>4,6,8,13</rect>
                 <key>scale9Paddings</key>
-                <rect>6,5,13,9</rect>
+                <rect>4,6,8,13</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_right_0.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_up_2.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_up_3.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_down_3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>6,5,11,9</rect>
+                <rect>4,6,7,11</rect>
                 <key>scale9Paddings</key>
-                <rect>6,5,11,9</rect>
+                <rect>4,6,7,11</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_right_1.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_right_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>7,6,13,13</rect>
+                <rect>7,5,13,9</rect>
                 <key>scale9Paddings</key>
-                <rect>7,6,13,13</rect>
+                <rect>7,5,13,9</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_right_2.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_right_2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>4,6,9,11</rect>
+                <rect>7,5,13,10</rect>
                 <key>scale9Paddings</key>
-                <rect>4,6,9,11</rect>
+                <rect>7,5,13,10</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_right_3.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_right_3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>5,6,9,11</rect>
+                <rect>6,5,12,9</rect>
                 <key>scale9Paddings</key>
-                <rect>5,6,9,11</rect>
+                <rect>6,5,12,9</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_up_0.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_down_0.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_down_2.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_down_3.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_right_2.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_right_3.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_up_0.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_up_1.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_up_2.png</key>
-            <key type="filename">D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_up_3.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_up_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>4,5,9,9</rect>
+                <rect>4,6,9,12</rect>
                 <key>scale9Paddings</key>
-                <rect>4,5,9,9</rect>
+                <rect>4,6,9,12</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_up_2.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_hit_up_3.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,6,9,13</rect>
+                <key>scale9Paddings</key>
+                <rect>4,6,9,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_down_0.png</key>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_up_0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>2,5,4,9</rect>
+                <key>scale9Paddings</key>
+                <rect>2,5,4,9</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_down_1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,3,8,6</rect>
+                <key>scale9Paddings</key>
+                <rect>4,3,8,6</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_right_0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>5,2,9,5</rect>
+                <key>scale9Paddings</key>
+                <rect>5,2,9,5</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">D:/Art Assets/textures/warrior_walk_right_3.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,4,7,7</rect>
+                <key>scale9Paddings</key>
+                <rect>3,4,7,7</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_down_0.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_down_1.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_down_2.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_down_03.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_right_0.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_right_1.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_right_2.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_right_3.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_up_0.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_up_1.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_up_2.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_behit_up_3.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_down_0.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_down_1.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_down_2.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_down_3.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_right_0.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_right_1.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_right_2.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_right_3.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_up_0.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_up_1.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_up_2.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_hit_up_3.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_idle_0.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_idle_1.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_idle_2.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_down_0.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_down_1.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_down_2.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_down_3.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_right_0.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_right_1.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_right_2.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_right_3.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_up_0.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_up_1.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_up_2.png</filename>
-            <filename>D:/Art Assets/rpg-monster-pack v1.0 (wonderdot)/warrior_walk_up_3.png</filename>
+            <filename>D:/Art Assets/textures/warrior_idle_0.png</filename>
+            <filename>D:/Art Assets/textures/warrior_idle_1.png</filename>
+            <filename>D:/Art Assets/textures/warrior_idle_2.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_down_0.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_down_1.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_down_2.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_down_3.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_right_0.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_right_1.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_right_2.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_right_3.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_up_0.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_up_1.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_up_2.png</filename>
+            <filename>D:/Art Assets/textures/warrior_walk_up_3.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_down_0.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_down_1.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_down_2.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_down_3.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_right_0.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_right_1.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_right_2.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_right_3.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_up_0.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_up_1.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_up_2.png</filename>
+            <filename>D:/Art Assets/textures/warrior_hit_up_3.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_down_0.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_down_1.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_down_2.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_down_3.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_right_0.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_right_1.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_right_2.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_right_3.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_up_0.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_up_1.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_up_2.png</filename>
+            <filename>D:/Art Assets/textures/warrior_behit_up_3.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

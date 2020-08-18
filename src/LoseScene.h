@@ -1,16 +1,14 @@
-#pragma once
-#ifndef __END_SCENE__
-#define __END_SCENE__
+﻿#pragma once
 
 #include "Scene.h"
 #include "Label.h"
 #include "Button.h"
 
-class EndScene final : public Scene
+class LoseScene final : public Scene
 {
 public:
-	EndScene();
-	~EndScene();
+	LoseScene();
+	~LoseScene();
 
 	// Inherited via Scene
 	virtual void draw() override;
@@ -24,5 +22,3 @@ private:
 
 	Button* m_pRestartButton;
 };
-
-#endif /* defined (__END_SCENE__) */

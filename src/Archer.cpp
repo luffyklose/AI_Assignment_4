@@ -9,7 +9,7 @@ const int SHOOTRANGE = 200;
 const int SHOOTDAMAGE = 20;
 const int SHOOTCD = 100;
 const int DETECTRANGE = 300;
-const int HITRECOVERTIME = 80;
+const int ARCHERHITRECOVERTIME = 80;
 const float MAXSPEED = 2.0f;
 
 Archer::Archer(Player* player):Enemy(player)
@@ -42,7 +42,7 @@ Archer::Archer(Player* player):Enemy(player)
 	m_detectionRadius = DETECTRANGE;
 	m_accel = 0.2;
 	m_velMax = 2.0;
-	m_hitRecoverCounter = HITRECOVERTIME;
+	m_hitRecoverCounter = ARCHERHITRECOVERTIME;
 
 	m_buildAnimations();
 	reset();
@@ -70,14 +70,45 @@ void Archer::draw()
 			x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
 	}*/
 
-	if (m_outerState == FLIGHT || m_innerState == MOVE_TO_RANGED || m_innerState == MOVE_TO_LOS || m_innerState == PATROL || m_innerState == MOVE_TO_COVER)
+	if (m_outerState == HITRECOVER)
+	{
+		std::cout << "be hit: " << m_outerState << " " << m_dir << std::endl;
+		switch (m_dir)
+		{
+		case left:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("be_hit_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			std::cout << "be hit left" << std::endl;
+			break;
+		case right:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("be_hit_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			std::cout << "be hit right" << std::endl;
+		case up:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("be_hit_up"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			std::cout << "be hit up" << std::endl;
+			break;
+		case down:
+			TextureManager::Instance()->playAnimation(
+				"archer", getAnimation("be_hit_up"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			std::cout << "be hit down" << std::endl;
+			break;
+		default:break;
+		}
+	}
+	else if (m_outerState == FLIGHT || m_innerState == MOVE_TO_RANGED || m_innerState == MOVE_TO_LOS || m_innerState == PATROL || m_innerState == MOVE_TO_COVER)
 	{
 		switch (m_dir)
 		{
 		case left:
 			TextureManager::Instance()->playAnimation(
-				"archer", getAnimation("walk_left"),
-				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				"archer", getAnimation("walk_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true, SDL_FLIP_HORIZONTAL);
 			break;
 		case right:
 			TextureManager::Instance()->playAnimation(
@@ -118,8 +149,8 @@ void Archer::draw()
 		{
 		case left:
 			TextureManager::Instance()->playAnimation(
-				"archer", getAnimation("hit_left"),
-				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				"archer", getAnimation("hit_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true, SDL_FLIP_HORIZONTAL);
 			break;
 		case right:
 			TextureManager::Instance()->playAnimation(
@@ -128,13 +159,13 @@ void Archer::draw()
 			break;
 		case up:
 			TextureManager::Instance()->playAnimation(
-				"archer", getAnimation("hit_up"),
-				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				"archer", getAnimation("hit_right"),
+				x, y, getWidth(), getHeight(), 0.1f, -90, 255, true);
 			break;
 		case down:
 			TextureManager::Instance()->playAnimation(
-				"archer", getAnimation("hit_down"),
-				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+				"archer", getAnimation("hit_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 90, 255, true);
 			break;
 		default:break;
 		}
@@ -189,7 +220,8 @@ void Archer::setActive()
 	m_curHealth = ENEMYMAXHEALTH;
 	m_isHitRecover = false;
 	m_isFled = false;
-	m_hitRecoverCounter = HITRECOVERTIME;
+	m_hitRecoverCounter = ARCHERHITRECOVERTIME;
+	m_dir = right;
 }
 
 void Archer::m_buildAnimations()
@@ -274,7 +306,7 @@ void Archer::m_buildAnimations()
 	setAnimation(hit_downAnimation);
 
 	Animation behit_rightAnimation = Animation();
-	behit_rightAnimation.name = "behit_right";
+	behit_rightAnimation.name = "be_hit_right";
 	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_right_0"));
 	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_right_1"));
 	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_right_2"));
@@ -282,7 +314,7 @@ void Archer::m_buildAnimations()
 	setAnimation(behit_rightAnimation);
 
 	Animation behit_upAnimation = Animation();
-	behit_upAnimation.name = "behit_up";
+	behit_upAnimation.name = "be_hit_up";
 	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_up_0"));
 	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_up_1"));
 	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_up_2"));
@@ -290,7 +322,7 @@ void Archer::m_buildAnimations()
 	setAnimation(behit_upAnimation);
 
 	Animation behit_downAnimation = Animation();
-	behit_upAnimation.name = "behit_down";
+	behit_upAnimation.name = "be_hit_down";
 	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_down_0"));
 	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_down_1"));
 	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("archer_behit_down_2"));
@@ -300,13 +332,10 @@ void Archer::m_buildAnimations()
 
 void Archer::m_checkCurrentConditions()
 {
-	if (m_hitRecoverCounter < HITRECOVERTIME)
+	if (m_hitRecoverCounter < ARCHERHITRECOVERTIME)
 	{
 		m_outerState = HITRECOVER;
-	}
-	else if (m_curHealth <= 0)
-	{
-		m_outerState = DEATH;
+		//std::cout << "dir: " << m_dir << std::endl;
 	}
 	else if (m_curHealth >= 25)
 	{
@@ -430,10 +459,10 @@ void Archer::m_stateMachineUpdate()
 			m_hitRecoverCounter++;
 			break;
 		}
-		case DEATH:
-		{
-			break;
-		}
+		//case DEATH:
+		//{
+		//	break;
+		//}
 		case FLIGHT:
 		{
 			// Flee Action

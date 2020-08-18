@@ -9,7 +9,7 @@ const int MELEERANGE = 20;
 const int MELEEDAMAGE = 20;
 const int MELEECD = 100;
 const int DETECTRANGE = 200;
-const int HITRECOVERTIME = 50;
+const int WARRIORHITRECOVERTIME = 50;
 const float MAXSPEED = 2.0f;
 
 Warrior::Warrior(Player* player):Enemy(player)
@@ -42,7 +42,7 @@ Warrior::Warrior(Player* player):Enemy(player)
 	m_detectionRadius = DETECTRANGE;
 	m_accel = 0.2;
 	m_velMax = 2.0;
-	m_hitRecoverCounter = HITRECOVERTIME;
+	m_hitRecoverCounter = WARRIORHITRECOVERTIME;
 	
 	m_buildAnimations();
 
@@ -59,84 +59,98 @@ void Warrior::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the plane sprite with simple propeller animation
-	/*TextureManager::Instance()->playAnimation(
-		"spritesheet", getAnimation("plane"),
-		x+10, y+10, getWidth(), getHeight(), 0.5f, m_angle, 255, true);*/
-
-		/*if (m_isPatrol)
+	if (m_outerState == HITRECOVER)
+	{
+		std::cout << "be hit: " << m_outerState << " " << m_dir << std::endl;
+		switch (m_dir)
 		{
+		case left:
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("be_hit_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true, SDL_FLIP_HORIZONTAL);
+			//std::cout << "be hit left" << std::endl;
+			break;
+		case right:
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("be_hit_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			std::cout << "be hit right" << std::endl;
+		case up:
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("be_hit_up"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			//std::cout << "be hit up" << std::endl;
+			break;
+		case down:
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("be_hit_up"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			//std::cout << "be hit down" << std::endl;
+			break;
+		default:break;
+		}
+	}
+	else if (m_outerState == FLIGHT || m_innerState == MOVE_TO_MELEE || m_innerState == MOVE_TO_LOS || m_innerState == PATROL)
+	{
+		switch (m_dir)
+		{
+		case left:
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("walk_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true,SDL_FLIP_HORIZONTAL);
+			//std::cout << "walk left" << std::endl;
+			break;
+		case right:
 			TextureManager::Instance()->playAnimation(
 				"warrior", getAnimation("walk_right"),
 				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-		}
-		else
-		{
+			//std::cout << "walk right" << std::endl;
+			break;
+		case up:
 			TextureManager::Instance()->playAnimation(
-				"warrior", getAnimation("idle"),
+				"warrior", getAnimation("walk_up"),
 				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-		}*/
-	
-		if (m_outerState == FLIGHT || m_innerState == MOVE_TO_MELEE || m_innerState == MOVE_TO_LOS || m_innerState == PATROL)
-		{
-			switch (m_dir)
-			{
-			case left:
-				TextureManager::Instance()->playAnimation(
-					"warrior", getAnimation("walk_left"),
-					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-				std::cout << "walk left" << std::endl;
-				break;
-			case right:
-				TextureManager::Instance()->playAnimation(
-					"warrior", getAnimation("walk_right"),
-					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-				std::cout << "walk right" << std::endl;
-				break;
-			case up:
-				TextureManager::Instance()->playAnimation(
-					"warrior", getAnimation("walk_up"),
-					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-				std::cout << "walk up" << std::endl;
-				break;
-			case down:
-				TextureManager::Instance()->playAnimation(
-					"warrior", getAnimation("walk_down"),
-					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-				std::cout << "walk down" << std::endl;
-				break;
-			default:break;
-			}
-		}
-		else if (m_innerState == MELEE_ATTACK)
-		{
-			switch (m_dir)
-			{
-			case left:
-				TextureManager::Instance()->playAnimation(
-				"warrior", getAnimation("hit_left"),
+			//std::cout << "walk up" << std::endl;
+			break;
+		case down:
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("walk_down"),
 				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-				break;
-			case right:
-				TextureManager::Instance()->playAnimation(
-					"warrior", getAnimation("hit_right"),
-					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-				break;
-			case up:
-				TextureManager::Instance()->playAnimation(
-					"warrior", getAnimation("hit_up"),
-					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-				break;
-			case down:
-				TextureManager::Instance()->playAnimation(
-					"warrior", getAnimation("hit_down"),
-					x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
-				break;
-			default:break;
-			}
+			//std::cout << "walk down" << std::endl;
+			break;
+		default:break;
 		}
+	}
+	else if (m_innerState == MELEE_ATTACK)
+	{
+		switch (m_dir)
+		{
+		case left:
+			TextureManager::Instance()->playAnimation(
+			"warrior", getAnimation("hit_right"),
+			x, y, getWidth(), getHeight(), 0.1f, 0, 255, true,SDL_FLIP_HORIZONTAL);
+			break;
+		case right:
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("hit_right"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		case up:
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("hit_up"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		case down:
+			TextureManager::Instance()->playAnimation(
+				"warrior", getAnimation("hit_down"),
+				x, y, getWidth(), getHeight(), 0.1f, 0, 255, true);
+			break;
+		default:break;
+		}
+	}
 	
-		m_pBorder->draw();
-		m_pFiller->draw();
+	m_pBorder->draw();
+	m_pFiller->draw();
 }
 
 void Warrior::update()
@@ -153,17 +167,6 @@ void Warrior::update()
 	m_stateMachineUpdate();
 		
 	m_meleeCounter++;
-
-	//if(m_isPatrol)
-	//{
-	//	//MovePlanetoPatrolNode();
-	//	//PatrolMove();
-	//	//Move2LOS();
-	//	//setAttackNode();
-	//	//Move2NearestAttackNode();
-	//	//Flee();
-	//	SoundManager::Instance().playSound("engine", 0, -1);
-	//}
 
 	m_pFiller->update();
 	m_pBorder->update();
@@ -194,35 +197,12 @@ void Warrior::setActive()
 	m_curHealth = ENEMYMAXHEALTH;
 	m_isHitRecover = false;
 	m_isFled = false;
-	m_hitRecoverCounter = HITRECOVERTIME;
+	m_hitRecoverCounter = WARRIORHITRECOVERTIME;
+	m_dir = right;
 }
 
 void Warrior::m_buildAnimations()
 {
-	/*Animation idleAnimation = Animation();
-
-	idleAnimation.name = "idle";
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-idle-0"));
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-idle-1"));
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-idle-2"));
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-idle-3"));
-
-	setAnimation(idleAnimation);
-
-	Animation runAnimation = Animation();
-
-	runAnimation.name = "run";
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-0"));
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-1"));
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-2"));
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-3"));
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-4"));
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-5"));
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-6"));
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("slime-run-7"));
-
-	setAnimation(runAnimation);*/
-
 	Animation idleAnimation = Animation();
 	idleAnimation.name = "idle";
 	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_idle_0"));
@@ -279,7 +259,7 @@ void Warrior::m_buildAnimations()
 	setAnimation(hit_downAnimation);
 
 	Animation behit_rightAnimation = Animation();
-	behit_rightAnimation.name = "behit_right";
+	behit_rightAnimation.name = "be_hit_right";
 	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_right_0"));
 	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_right_1"));
 	behit_rightAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_right_2"));
@@ -287,7 +267,7 @@ void Warrior::m_buildAnimations()
 	setAnimation(behit_rightAnimation);
 
 	Animation behit_upAnimation = Animation();
-	behit_upAnimation.name = "behit_up";
+	behit_upAnimation.name = "be_hit_up";
 	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_up_0"));
 	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_up_1"));
 	behit_upAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_up_2"));
@@ -295,7 +275,7 @@ void Warrior::m_buildAnimations()
 	setAnimation(behit_upAnimation);
 
 	Animation behit_downAnimation = Animation();
-	behit_upAnimation.name = "behit_down";
+	behit_upAnimation.name = "be_hit_below";
 	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_down_0"));
 	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_down_1"));
 	behit_downAnimation.frames.push_back(getSpriteSheet()->getFrame("warrior_behit_down_2"));
@@ -347,13 +327,9 @@ void Warrior::MoveWarrior()
 
 void Warrior::m_checkCurrentConditions()
 {
-	if((m_hitRecoverCounter < HITRECOVERTIME))
+	if((m_hitRecoverCounter < WARRIORHITRECOVERTIME))
 	{
 		m_outerState = HITRECOVER;
-	}
-	else if(m_curHealth<=0)
-	{
-		m_outerState = DEATH;
 	}
 	else if (m_curHealth >= 25)
 	{
@@ -456,10 +432,10 @@ void Warrior::m_stateMachineUpdate()
 		m_hitRecoverCounter++;
 		break;
 	}
-	case DEATH:
+	/*case DEATH:
 	{
 		break;
-	}
+	}*/
 	case FLIGHT:
 	{
 		// Flee Action
@@ -591,7 +567,9 @@ void Warrior::Melee()
 		if (CollisionManager::AABBCheck(temp, m_pTargetPlayer))
 		{
 			m_pTargetPlayer->DecHP(MELEEDAMAGE);
-			SoundManager::Instance().playSound("melee", 0, -1);
+			m_pTargetPlayer->setPlayerState(PLAYER_BEHIT);
+			m_pTargetPlayer->resetHitRecover();
+			SoundManager::Instance().playSound("melee", 0, 1);
 		}
 
 		break;
@@ -606,7 +584,9 @@ void Warrior::Melee()
 		if (CollisionManager::AABBCheck(temp, m_pTargetPlayer))
 		{
 			m_pTargetPlayer->DecHP(MELEEDAMAGE);
-			SoundManager::Instance().playSound("melee", 0, -1);
+			m_pTargetPlayer->setPlayerState(PLAYER_BEHIT);
+			m_pTargetPlayer->resetHitRecover();
+			SoundManager::Instance().playSound("melee", 0, 1);
 		}
 		break;
 	}
@@ -620,7 +600,9 @@ void Warrior::Melee()
 		if (CollisionManager::AABBCheck(temp, m_pTargetPlayer))
 		{
 			m_pTargetPlayer->DecHP(MELEEDAMAGE);
-			SoundManager::Instance().playSound("melee", 0, -1);
+			m_pTargetPlayer->setPlayerState(PLAYER_BEHIT);
+			m_pTargetPlayer->resetHitRecover();
+			SoundManager::Instance().playSound("melee", 0, 1);
 		}
 		break;
 	}
@@ -634,7 +616,9 @@ void Warrior::Melee()
 		if (CollisionManager::AABBCheck(temp, m_pTargetPlayer))
 		{
 			m_pTargetPlayer->DecHP(MELEEDAMAGE);
-			SoundManager::Instance().playSound("melee", 0, -1);
+			m_pTargetPlayer->setPlayerState(PLAYER_BEHIT);
+			m_pTargetPlayer->resetHitRecover();
+			SoundManager::Instance().playSound("melee", 0, 1);
 		}
 		break;
 	}

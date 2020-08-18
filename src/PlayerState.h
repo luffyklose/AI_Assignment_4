@@ -1,0 +1,10 @@
+#pragma once
+
+enum PlayerState
+{
+	PLAYER_IDLE,
+	PLAYER_WALK,
+	PLAYER_HIT,
+	PLAYER_BEHIT,
+	NUM_OF_PLAYER_STATES
+};

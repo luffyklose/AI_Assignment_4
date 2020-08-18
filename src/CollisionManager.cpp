@@ -224,8 +224,8 @@ int CollisionManager::minSquaredDistanceLineLine(glm::vec2 line1_start, glm::vec
 
 bool CollisionManager::LOSCheck(GameObject* from, GameObject* to, GameObject* obstacle)
 {
-	const auto lineStart = from->getTransform()->position + glm::vec2(0.5f * from->getWidth(), 0.5f * from->getHeight());
-	const auto lineEnd = to->getTransform()->position + glm::vec2(0.5f * to->getWidth(), 0.5f * to->getHeight());
+	const auto lineStart = from->getTransform()->position;
+	const auto lineEnd = to->getTransform()->position;
 	// aabb
 	const auto boxWidth = obstacle->getWidth();
 	const int halfBoxWidth = boxWidth * 0.5f;
@@ -233,10 +233,10 @@ bool CollisionManager::LOSCheck(GameObject* from, GameObject* to, GameObject* ob
 	const int halfBoxHeight = boxHeight * 0.5f;
 	const auto boxStart = obstacle->getTransform()->position - glm::vec2(halfBoxWidth, halfBoxHeight);
 
-	if (lineRectCheck(lineStart, lineEnd, boxStart, boxWidth, boxHeight))
+	//std::cout << lineStart.x<<" "<<lineStart.y<< " End:" << lineEnd.x<<" "<<lineEnd.y << " BoxStart: " << boxStart.x<<" "<<boxStart.y << " " << boxWidth << " " << boxHeight << std::endl;
+	if (!lineRectCheck(lineStart, lineEnd, boxStart, boxWidth, boxHeight))
 	{
-		//std::cout << "No LOS - Collision with DestructibleObstacle!" << std::endl;
-		
+		//std::cout << "No LOS - Collision with DestructibleObstacle!" << std::endl;		
 		return false;
 	}
 
@@ -249,14 +249,14 @@ bool CollisionManager::LOSCheck(GameObject* from, GameObject* to, Tile* obstacle
 	{
 		return false;
 	}
-	const auto lineStart = from->getTransform()->position + glm::vec2(0.5f * from->getWidth(), 0.5f * from->getHeight());
-	const auto lineEnd = to->getTransform()->position + glm::vec2(0.5f * to->getWidth(), 0.5f * to->getHeight());
+	const auto lineStart = from->getTransform()->position;
+	const auto lineEnd = to->getTransform()->position;
 	// aabb
 	const auto boxWidth = obstacle->getWidth();
 	const int halfBoxWidth = boxWidth * 0.5f;
 	const auto boxHeight = obstacle->getHeight();
 	const int halfBoxHeight = boxHeight * 0.5f;
-	const auto boxStart = obstacle->getTransform()->position;
+	const auto boxStart = obstacle->getTransform()->position - glm::vec2(halfBoxWidth, halfBoxHeight);
 	
 	/*std::cout << "Start: " << lineStart.x << " " << lineStart.y << " End: " << lineEnd.x << " " << lineEnd.y << std::endl;
 	std::cout << "DestructibleObstacle: " << obstacle->getTransform()->position.x << " " << obstacle->getTransform()->position.y << std::endl;

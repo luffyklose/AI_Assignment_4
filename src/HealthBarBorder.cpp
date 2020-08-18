@@ -1,6 +1,8 @@
 #include "HealthBarBorder.h"
-
 #include "../src/TextureManager.h"
+
+const int BORDERWIDTH = 40;
+const int BORDERHEIGHT = 5;
 
 HealthBarBorder::HealthBarBorder(Sprite* sp)
 {
@@ -9,10 +11,10 @@ HealthBarBorder::HealthBarBorder(Sprite* sp)
 	TextureManager::Instance()->load("../Assets/textures/HealthBarBorder.png", "HealthBarBorder");
 
 	const auto size = TextureManager::Instance()->getTextureSize("HealthBarBorder");
-	setWidth(size.x);
-	setHeight(size.y);
-	getTransform()->position.x = sp->getTransform()->position.x;
-	getTransform()->position.y = sp->getTransform()->position.y - 40;
+	setWidth(BORDERWIDTH);
+	setHeight(BORDERHEIGHT);
+	getTransform()->position.x = sp->getTransform()->position.x - 0.5f * sp->getWidth();
+	getTransform()->position.y = sp->getTransform()->position.y - 30;
 	getRigidBody()->velocity = glm::vec2(0, 0);
 	getRigidBody()->isColliding = false;
 
@@ -28,15 +30,15 @@ void HealthBarBorder::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the target
-	TextureManager::Instance()->draw("HealthBarBorder", x, y, this->getWidth(), this->getHeight(), 0,255,true);
+	TextureManager::Instance()->draw("HealthBarBorder", x, y, this->getWidth(), this->getHeight(), 0,255,false);
 }
 
 void HealthBarBorder::update()
 {
 	//const auto size = TextureManager::Instance()->getTextureSize("HealthBarBorder");
 
-	getTransform()->position.x = m_pSp->getTransform()->position.x;
-	getTransform()->position.y = m_pSp->getTransform()->position.y - 20;
+	getTransform()->position.x = m_pSp->getTransform()->position.x - 0.5f * m_pSp->getWidth();
+	getTransform()->position.y = m_pSp->getTransform()->position.y - 30;
 }
 
 void HealthBarBorder::clean()

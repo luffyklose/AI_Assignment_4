@@ -167,6 +167,8 @@
     <ClCompile Include="..\src\HealthBarBorder.cpp" />
     <ClCompile Include="..\src\HealthBarFiller.cpp" />
     <ClCompile Include="..\src\DestructibleObstacle.cpp" />
+    <ClCompile Include="..\src\Image.cpp" />
+    <ClCompile Include="..\src\LoseScene.cpp" />
     <ClCompile Include="..\src\NodeManager.cpp" />
     <ClCompile Include="..\src\PathManager.cpp" />
     <ClCompile Include="..\src\PathNode.cpp" />
@@ -178,7 +180,7 @@
     <ClCompile Include="..\src\Tile.cpp" />
     <ClCompile Include="..\src\UIControl.cpp" />
     <ClCompile Include="..\src\DisplayObject.cpp" />
-    <ClCompile Include="..\src\EndScene.cpp" />
+    <ClCompile Include="..\src\WinScene.cpp" />
     <ClCompile Include="..\src\FontManager.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GameController.cpp" />
@@ -215,9 +217,12 @@
     <ClInclude Include="..\src\HealthBarBorder.h" />
     <ClInclude Include="..\src\HealthBarFiller.h" />
     <ClInclude Include="..\src\DestructibleObstacle.h" />
+    <ClInclude Include="..\src\Image.h" />
+    <ClInclude Include="..\src\LoseScene.h" />
     <ClInclude Include="..\src\NodeManager.h" />
     <ClInclude Include="..\src\PathManager.h" />
     <ClInclude Include="..\src\PathNode.h" />
+    <ClInclude Include="..\src\PlayerState.h" />
     <ClInclude Include="..\src\Portal.h" />
     <ClInclude Include="..\src\PortalManager.h" />
     <ClInclude Include="..\src\ProjectileManager.h" />
@@ -227,7 +232,7 @@
     <ClInclude Include="..\src\Tile.h" />
     <ClInclude Include="..\src\UIControl.h" />
     <ClInclude Include="..\src\DisplayObject.h" />
-    <ClInclude Include="..\src\EndScene.h" />
+    <ClInclude Include="..\src\WinScene.h" />
     <ClInclude Include="..\src\Event.h" />
     <ClInclude Include="..\src\EventManager.h" />
     <ClInclude Include="..\src\FontManager.h" />

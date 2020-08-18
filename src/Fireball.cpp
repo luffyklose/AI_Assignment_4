@@ -2,7 +2,7 @@
 #include "ExplosionManager.h"
 #include "TextureManager.h"
 
-const float FLYSPEED = 4.0f;
+const float FLYSPEED = 7.0f;
 const int FIREBALLDAMAGE = 20;
 
 FireBall::FireBall() :m_face(1),m_damage(FIREBALLDAMAGE),m_speed(FLYSPEED)

@@ -13,8 +13,8 @@ public:
 			s_pInstance = new EnemyManager();
 		return s_pInstance;
 	}
-	void generateArcher();
-	void generateWarrior();
+	void generateArcher(int& enemyNum);
+	void generateWarrior(int& enemyNum);
 	void Init();
 	void update();
 	void draw();

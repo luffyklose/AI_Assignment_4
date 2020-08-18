@@ -6,10 +6,10 @@ gggggggggggggggggggg
 gggggbbbbbbbbbbggggg
 gggggggggggggggggggg
 gggggggggggggggggggg
-ggggggggbbbggggggggg
+ggggggggsssggggggggg
 gggggggggggggggggggg
 gggggggggggggggggggg
-ggggbggggsggggggbggg
-ggggbgggggggggggbggg
-ggggbgggggggggggbggg
+ggggsggggsggggggsggg
+ggggsgggggggggggsggg
+ggggsgggggggggggsggg
 gggggggggggggggggggg
